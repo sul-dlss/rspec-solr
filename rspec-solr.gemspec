@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Naomi Dushay", "Chris Beer"]
   gem.email         = ["ndushay@stanford.edu", "cabeer@stanford.edu"]
   gem.description   = "Provides RSpec custom matchers to be used with Solr response objects."
-  gem.summary       = "RSpec custom matchers for Solr response objects."
+  gem.summary       = "RSpec custom matchers for Solr response objects"
   gem.homepage      = "http://github.com/sul-dlss/rspec-solr"
 
   gem.extra_rdoc_files = ["LICENSE.txt", "README.rdoc", "expectation_matchers.rdoc"]
