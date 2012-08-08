@@ -3,8 +3,11 @@ require 'rspec-solr'
 describe RSpecSolr do
 
   context "have_documents with no doc matcher" do
-    it "matcher" do
+    it "passes if response.should has documents" do
       @solr_resp_w_docs.should have_documents
+    end
+
+    it "passes if response.should_not has no documents" do
       @solr_resp_no_docs.should_not have_documents
     end
 
@@ -16,10 +19,8 @@ describe RSpecSolr do
     it "failure message for should_not" do
       expect {@solr_resp_w_docs.should_not have_documents}.
         to raise_error(RSpec::Expectations::ExpectationNotMetError, /did not expect documents, but Solr response had /)
-    end
-    
+    end    
   end
-  
   
   before(:all) do
     @solr_resp_w_docs = { "responseHeader" => 
