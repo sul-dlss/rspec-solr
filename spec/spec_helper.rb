@@ -14,5 +14,7 @@ end
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
+Dir['./spec/support/**/*'].each {|f| require f}
+
 #RSpec.configure do |config|
 #end

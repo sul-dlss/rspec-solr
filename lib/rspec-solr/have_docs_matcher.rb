@@ -21,13 +21,14 @@ module RSpecSolr::Matchers
     # the actual method is defined using RSpec's matcher DSL
   end
   
-  # Determine if the receiver (a Solr response object) has at least
-  #  one document
+  # Define .have_documents
+  # Determine if the receiver (a Solr response object) has at least one document
   rspec_namespace.define :have_documents do |document_matcher|
     match do |solr_resp|
       if !document_matcher
         solr_resp["response"]["docs"].size > 0
       else
+# TODO: test this
         solr_resp.documents.any? { |doc| document_matcher.include? doc }
       end
     end
@@ -36,6 +37,7 @@ module RSpecSolr::Matchers
       if !document_matcher
         "expected documents in Solr response #{solr_resp["response"]}"
       else
+# TODO: test this
         "expected documents #{document_matcher.to_s} in #{solr_resp["response"]["docs"]}"
       end
       
@@ -45,11 +47,14 @@ module RSpecSolr::Matchers
       if !document_matcher
         "did not expect documents, but Solr response had #{solr_resp["response"]["docs"]}"
       else
+# TODO: test this
         "did not expect #{document_matcher.to_s} to be in #{solr_resp["response"]["docs"]}"
       end
     end
     
-  end
+  end  # define :have_documents
+
+# TODO: does below work?
 
   def document finders = {}
     DocumentFinder.new finders
