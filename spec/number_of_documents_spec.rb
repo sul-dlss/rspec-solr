@@ -90,15 +90,6 @@ describe RSpecSolr do
 #  
   
   
-# TODO:  check for should_not failure messages  
-#
-#  it "failure message for should_not" do
-#    expect {@solr_resp_w_docs.should_not have_documents}.
-#      to raise_error(RSpec::Expectations::ExpectationNotMetError, /FIXME did not expect documents, but Solr response had /)
-#  end    
-#
-  
-  
   before(:all) do
     @solr_resp_1_doc = { "response" =>
                           { "numFound" => 5, 

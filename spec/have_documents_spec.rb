@@ -12,13 +12,15 @@ describe RSpecSolr do
     end
 
     it "failure message for should" do
-      expect {@solr_resp_no_docs.should have_documents}.
-        to raise_error(RSpec::Expectations::ExpectationNotMetError, /expected documents in Solr response /)
+      lambda {
+        @solr_resp_no_docs.should have_documents
+      }.should fail_matching("expected documents in Solr response ")
     end
 
     it "failure message for should_not" do
-      expect {@solr_resp_w_docs.should_not have_documents}.
-        to raise_error(RSpec::Expectations::ExpectationNotMetError, /did not expect documents, but Solr response had /)
+      lambda {
+        @solr_resp_w_docs.should_not have_documents
+      }.should fail_matching("did not expect documents, but Solr response had ")
     end    
   end
   
