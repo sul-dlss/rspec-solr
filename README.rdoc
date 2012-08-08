@@ -1,6 +1,6 @@
 = RSpec Solr
 
-Provides a number of RSpec custom matchers to be used with Solr response objects.
+Provides RSpec custom matchers to be used with Solr response objects.
 
 == Installation
 
