@@ -29,5 +29,7 @@ Gem::Specification.new do |gem|
   # tests for this gem
 	gem.add_development_dependency 'simplecov'
 	gem.add_development_dependency 'simplecov-rcov'
+	# continuous integration 
+	gem.add_development_dependency 'travis-lint'
   
 end
