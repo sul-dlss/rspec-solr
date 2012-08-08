@@ -1,5 +1,7 @@
 = RSpec Solr
 
+{<img src="https://secure.travis-ci.org/sul-dlss/rspec-solr.png?branch=master" alt="Build Status" />}[http://travis-ci.org/sul-dlss/rspec-solr]
+
 Provides RSpec custom matchers to be used with Solr response objects.
 
 == Installation
