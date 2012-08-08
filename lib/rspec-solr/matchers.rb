@@ -32,13 +32,18 @@ module RSpecSolr::Matchers
       end
     end
 
-#    failure_message_for_should do |solr_resp|
-#      "expected #{document_matcher.to_s} to be in #{solr_resp["response"]["docs"]}"
-#    end
+    failure_message_for_should do |solr_resp|
+      if !document_matcher
+        "expected documents in Solr response #{solr_resp["response"]}"
+      else
+        "expected documents #{document_matcher.to_s} in #{solr_resp["response"]["docs"]}"
+      end
+      
+    end
     
     failure_message_for_should_not do |solr_resp|
       if !document_matcher
-        "did not expect docs, but Solr response had #{solr_resp["response"]["docs"]}"
+        "did not expect documents, but Solr response had #{solr_resp["response"]["docs"]}"
       else
         "did not expect #{document_matcher.to_s} to be in #{solr_resp["response"]["docs"]}"
       end
