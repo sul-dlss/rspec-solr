@@ -39,7 +39,7 @@ describe RSpecSolr do
   
   # fixtures at end of this file
 
-  context "should have(n)_documents" do
+  context "should have(n).documents" do
     
     it "pluralizes 'documents'" do
       @solr_resp_1_doc.should have(1).document
