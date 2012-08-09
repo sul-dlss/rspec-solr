@@ -3,6 +3,23 @@ require 'rspec-solr'
 
 describe RSpecSolr do
 
+  context "shouldn't break RSpec #have matcher" do
+    it "for Array" do
+      [1,2,3].should have(3).items
+      [1,2,3].should_not have(4).items
+      [1,2,3].should have_at_least(2).items
+      [1,2,3].should have_at_least(1).item
+      [1,2,3].should have_at_most(5).items
+    end
+    
+    it "for Hash" do
+      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_exactly(3).items
+      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should_not have(4).items
+      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_at_least(2).items
+      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_at_most(5).items
+    end
+  end
+  
   # fixtures at end of this file
 
   context "should have(n)_documents" do
