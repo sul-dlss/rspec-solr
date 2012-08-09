@@ -1,25 +1,30 @@
 = SolrTestFramework Custom Matchers for RSpec
 
-(solr_response.should ...  or solr_response.should_not ...)
+(rspec-solr_resp_hash..should ...  or rspec-solr_resp_hash..should_not ...)
 
-== NUMBER OF RESULTS
+== MATCHING WHETHER RESPONSE HAS DOCUMENTS OR NOT
 
-=== Potential Syntax:
-* solr_response.should have results
-* solr_response.should have_results
-* solr_response.should get_results
-* have clobbers rspec::matcher::have
-* get? return?  retrieve?  match?  solr_resp_have?  find?
-* contain?  include?  match?
+=== Matcher
+* have_documents
+
+=== Usage
+* rspec-solr_resp_hash.should have_documents
+* rspec-solr_resp_hash.should_not have_documents
+
+== MATCHING NUMBER OF DOCUMENTS 
+
+Note:  this is about the total number of Solr documents that match ("numFound"), NOT solely the documents returned in the response
 
 === Matchers
-* have_results
-* have_at_least(3).results  # numFound / total number of matching docs
-* have_at_most(3).results
-* have_exactly(4).results   or    have(4).results
+* have(2).documents
+* have_exactly(4).documents
+* have_at_least(3).documents  
+* have_at_most(3).documents
 
+=== Usage
+* rspec-solr_resp_hash.should have_at_least(3).documents
 
-== DOCUMENTS IN RESPONSE
+== MATCHING SPECIFIC DOCUMENTS IN RESPONSE
 
 === Specifying Documents
 * document(:fldname => "value")
@@ -28,12 +33,6 @@
 * document(:fld1 => "val1", :fld2 => "val2")   # doc must meet both predicates
 * document(:fldname => "/regex/")
 
-=== Potential Syntax 
-* solr_response.should_include document()
-* solr_response.should include_document()
-* solr_response.should include document()
-* ... have ...
-
 === Matchers
 * include document() 
 * include documents()   # if array, should_not implies NONE of them should be included
@@ -41,13 +40,19 @@
 * include_documents().in_first(4).results
 * include_at_least(3).of_these_documents().in_first(3).results
 
+=== Usage
+* rspec-solr_resp_hash.should_include document()
+* rspec-solr_resp_hash.should include_document()
+* rspec-solr_resp_hash.should include document()
+* ... have ...
+
 
 == ORDER OF DOCUMENTS
 
 === Potential Syntax:
-* solr_response.document().should come_before_document()
-* solr_response.document().should come_before_document()
-* solr_response.should include_document().before_document()
+* rspec-solr_resp_hash.document().should come_before_document()
+* rspec-solr_resp_hash.document().should come_before_document()
+* rspec-solr_resp_hash.should include_document().before_document()
 * subject.document(:title => 'vala').should come_before(subject.document(:title =>'valb'))
 * subject.should have_result_field_ordered("title", "vala", "valb") 
 
@@ -67,6 +72,7 @@
 * facets(:format => ["Image", "Map"])
 
 === Potential Syntax
+rspec-solr_resp_hash.should include_facet
 
 === Matchers
 * include_facet().before_facet()
@@ -82,6 +88,7 @@
 * than_search_for("foo")  # only q is specified, defaults for everything else
 
 === Potential Syntax
+rspec-solr_resp_hash.should
 
 === Matchers
 * have_more_results_than_solr_response(:params)
