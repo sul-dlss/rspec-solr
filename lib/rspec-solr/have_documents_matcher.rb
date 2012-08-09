@@ -23,59 +23,18 @@ module RSpecSolr::Matchers
   
   # Define .have_documents
   # Determine if the receiver (a Solr response object) has at least one document
-  rspec_namespace.define :have_documents do |document_matcher|
+  rspec_namespace.define :have_documents do 
     match do |solr_resp|
-      if !document_matcher
-        solr_resp["response"]["docs"].size > 0
-      else
-# TODO: test this?  remove in favor of include?
-        solr_resp.documents.any? { |doc| document_matcher.include? doc }
-      end
+      solr_resp["response"]["docs"].size > 0
     end
 
     failure_message_for_should do |solr_resp|
-      if !document_matcher
-        "expected documents in Solr response #{solr_resp["response"]}"
-      else
-# TODO: test this?  remove in favor of include?
-        "expected documents #{document_matcher.to_s} in #{solr_resp["response"]["docs"]}"
-      end
-      
+      "expected documents in Solr response #{solr_resp["response"]}"
     end
     
     failure_message_for_should_not do |solr_resp|
-      if !document_matcher
-        "did not expect documents, but Solr response had #{solr_resp["response"]["docs"]}"
-      else
-# TODO: test this?  remove in favor of include?
-        "did not expect #{document_matcher.to_s} to be in #{solr_resp["response"]["docs"]}"
-      end
-    end
-    
-  end  # define :have_documents
-
-# TODO: does below work?    remove in favor of include?
-
-  def document finders = {}
-    DocumentFinder.new finders
-  end
-
-  class DocumentFinder
-    def initialize finders
-      @finders = finders
-    end
-
-    def to_s
-      @finders.to_s
-    end
-
-    def include? doc
-      @finders.all? do |k, vals|
-        Array(vals).any? do |v|
-          doc[k] == v
-        end
-      end
-    end
+      "did not expect documents, but Solr response had #{solr_resp["response"]["docs"]}"
+    end 
   end
   
 end
