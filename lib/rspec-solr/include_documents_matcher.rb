@@ -5,6 +5,7 @@ module RSpec
     module BuiltIn
       class Include 
         
+private        
         # overriding method so we can use RSpec include matcher for document in Solr response
         #   my_solr_resp_hash.should include({"id" => "666"})
         def perform_match(predicate, hash_predicate, actuals, expecteds)
