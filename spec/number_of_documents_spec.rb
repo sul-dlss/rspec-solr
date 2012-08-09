@@ -18,6 +18,23 @@ describe RSpecSolr do
       {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_at_least(2).items
       {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_at_most(5).items
     end
+    
+    it "for String" do
+      "this string".should have(11).characters
+      "this string".should_not have(12).characters
+    end
+    
+    it "passes args to target" do
+      target = mock("target")
+      target.should_receive(:items).with("arg1","arg2").and_return([1,2,3])
+      target.should have(3).items("arg1","arg2")
+    end
+    it "passes block to target" do
+          target = mock("target")
+          block = lambda { 5 }
+          target.should_receive(:items).with("arg1","arg2", block).and_return([1,2,3])
+          target.should have(3).items("arg1","arg2", block)
+    end
   end
   
   # fixtures at end of this file
