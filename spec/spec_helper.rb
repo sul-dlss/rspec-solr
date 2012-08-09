@@ -12,7 +12,9 @@ SimpleCov.start do
   add_filter "/spec/"
 end
 
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
 
 Dir['./spec/support/**/*'].each {|f| require f}
 
