@@ -14,6 +14,10 @@ describe RSpecSolr do
           @solr_resp_5_docs.should include("fld" => "val")  # 2 docs match 
         end
         
+        it "passes if single value expectation is expressed as an Array" do
+          @solr_resp_5_docs.should include("id" => ["111"])
+        end
+        
         it "fails if no Solr document in response has 'fldval' for the named field" do
           lambda {
             @solr_resp_5_docs.should have_document("id" => "not_there")
@@ -27,20 +31,6 @@ describe RSpecSolr do
         end
       end # single valued fields in docs
       
-      context "doc expectations against multi-valued fields" do
-        it "does something" do
-          pending "to be implemented"
-        end
-        #      it "should be true when all the expected values are matched" do
-        #        @solr_resp_5_docs.should have_document({"fld" => ["val1", "val2", "val3"]})
-        #        @solr_resp_5_docs.should have_document({"fld" => ["val1", "val2"]})
-        #      end
-        #      it "should work with an array of field values" do
-        #        @solr_resp_5_docs.should_not have_document({"id" => "222", "fld" => "val"})
-        #      end
-        #    end
-        
-      end # multi-valued fields in docs
     end # context "should_not include('fldname'=>'fldval')"
 
 
@@ -66,13 +56,12 @@ describe RSpecSolr do
         it "passes if no Solr document in response has the named field" do
             @solr_resp_5_docs.should_not have_document({"not_there" => "anything"})
         end
+        
+        it "passes if single field value is expressed as Array" do
+          @solr_resp_5_docs.should_not have_document({"id" => ["not_there"]})
+        end
       end # single valued fields in docs
 
-      context "doc expectations against multi-valued fields" do
-        it "does something" do
-          pending "to be implemented"
-        end
-      end # multi-valued fields in docs
     end # "should_not include('fldname'=>'fldval')"
 
     # MULTIPLE FIELDS SPECIFIED
@@ -103,12 +92,6 @@ describe RSpecSolr do
         end
       end # single valued fields in docs
       
-      context "doc expectations against multi-valued fields" do
-        it "does something" do
-          pending "to be implemented"
-        end
-        
-      end # multi-valued fields in docs  
     end # should include('fld1'=>'val1', 'fld2'=>'val2')
 
 
@@ -143,13 +126,67 @@ describe RSpecSolr do
         end
       end # single valued fields in docs
 
-      context "doc expecations against multi-valued fields" do
-        it "does something" do
-          pending "to be implemented"
-        end
-      end # multivalued fields in docs
     end # should_not include('fld1'=>'val1', 'fld2'=>'val2')
     
+    
+    context "doc expectations against multi-valued fields" do
+      
+      context "should include(doc_exp)" do
+        it "passes if all the expected values match all the values in a Solr document in the response" do
+          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "val3"])
+          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "val3"], "id" => "444")
+        end
+
+        it "passes if all the expected values match some of the values in a Solr document in the response" do
+          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"])
+          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"], "id" => "444")
+        end
+
+        it "fails if none of the expected values match the values in a Solr document in the response" do
+          lambda {
+            @solr_resp_5_docs.should have_document("fld" => ["not_there", "also_not_there"])
+          }.should fail
+        end
+
+        it "fails if only some of the expected values match the values in a Solr document in the response" do
+          lambda {
+            @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "not_there"])
+          }.should fail
+        end
+      end # should
+      
+      context "should_not include(doc_exp)" do
+        it "fails if all the expected values match all the values in a Solr document in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "val3"])
+          }.should fail
+          lambda {
+            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "val3"], "id" => "444")
+          }.should fail
+        end
+        
+        it "fails if all the expected values match some of the values in a Solr document in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"])
+          }.should fail
+          lambda {
+            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"], "id" => "444")
+          }.should fail
+        end
+        
+        it "passes if none of the expected values match the values in a Solr document in the response" do
+          @solr_resp_5_docs.should_not have_document("fld" => ["not_there", "also_not_there"])
+          @solr_resp_5_docs.should_not have_document("fld" => ["not_there", "also_not_there"], "id" => "444")
+        end
+        
+        it "passes if only some of the expected values match the values in a Solr document in the response" do
+          @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "not_there"])
+          @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "not_there"], "id" => "444")
+        end
+        
+      end # should_not    
+  
+    end # multi-valued fields in docs
     
     
     context "should include(single_string_arg)" do

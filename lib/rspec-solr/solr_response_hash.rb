@@ -19,23 +19,25 @@ class RSpecSolr
     
     # @param expected_doc [Hash] key-val pairs indicating what should be matched in a document in the response
     # @example Expected Doc Hash
-    #   {"id" => "666", "title" => "warm fuzzies"}
+    #   {"id" => "666"}
+    #   {"subject" => ["warm fuzzies", "fluffy"]}
+    #   {"title" => "warm fuzzies", "subject" => ["puppies"]}
     # @return true if this Solr Response contains a document hash which contains all the key-val pairs in the expected_doc
     def has_document?(expected_doc)
       if (expected_doc.is_a?(Hash))
-        docs.each { |doc| 
-          flds_match = 0
-          expected_doc.each_pair { | exp_fname, exp_val |
-            if doc.include?(exp_fname) && doc[exp_fname] == exp_val  
-              flds_match += 1
-            end
+        # we are happy if any doc meets all of our expectations
+        docs.any? { |doc| 
+          expected_doc.all? { | exp_fname, exp_vals |
+            doc.include?(exp_fname) && 
+              # exp_vals can be a String or an Array
+              # if it's an Array, then all expected values must be present
+              Array(exp_vals).all? { | exp_val |
+                # a doc's fld values can be a String or an Array
+                Array(doc[exp_fname]).include?(exp_val)
+            }
           }
-          if (flds_match == expected_doc.keys.size)
-            return true
-          end
         }
       end
-      return false
     end
     
     # way to access the Array of Hashes representing the Solr documents in the response
