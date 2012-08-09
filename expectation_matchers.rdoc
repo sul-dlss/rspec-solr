@@ -8,6 +8,9 @@
 * solr_response.should have results
 * solr_response.should have_results
 * solr_response.should get_results
+* have clobbers rspec::matcher::have
+* get? return?  retrieve?  match?  solr_resp_have?  find?
+* contain?  include?  match?
 
 === Matchers
 * have_results
