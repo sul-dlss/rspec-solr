@@ -129,7 +129,7 @@ describe RSpecSolr do
     end # should_not include('fld1'=>'val1', 'fld2'=>'val2')
     
     
-    context "doc expectations against multi-valued fields" do
+    context "multi-valued fields and expectations" do
       
       context "should include(doc_exp)" do
         it "passes if all the expected values match all the values in a Solr document in the response" do
@@ -139,6 +139,7 @@ describe RSpecSolr do
 
         it "passes if all the expected values match some of the values in a Solr document in the response" do
           @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"])
+          @solr_resp_5_docs.should have_document("fld" => "val1")
           @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"], "id" => "444")
         end
 
@@ -168,6 +169,9 @@ describe RSpecSolr do
         it "fails if all the expected values match some of the values in a Solr document in the response" do
           lambda {
             @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"])
+          }.should fail
+          lambda {
+            @solr_resp_5_docs.should_not have_document("fld" => "val1")
           }.should fail
           lambda {
             @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"], "id" => "444")
