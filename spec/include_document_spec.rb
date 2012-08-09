@@ -11,20 +11,23 @@ describe RSpecSolr do
     end    
   end
   
-  context "shouldn't break RSpec" do
-    it "include for String" do
+  context "shouldn't break RSpec #include matcher" do
+    it "for String" do
       "abc".should include("a")
       "abc".should_not include("d")
     end
     
-    it "include for Array" do
+    it "for Array" do
       [1,2,3].should include(3)
+      [1,2,3].should include(2,3)
       [1,2,3].should_not include(4)
+#      [1,2,3].should_not include(1,4)
     end
     
-    it "include for Hash" do
+    it "for Hash" do
       {:key => 'value'}.should include(:key)
       {:key => 'value'}.should_not include(:key2)
+#      {:key => 'value'}.should_not include(:key, :key2)
       {'key' => 'value'}.should include('key')
       {'key' => 'value'}.should_not include('key2')
     end
