@@ -3,6 +3,8 @@ require 'rspec-solr'
 
 describe RSpecSolr do
 
+  # fixtures at end of this file
+
   context "should have(n)_documents" do
     
     it "pluralizes 'documents'" do
@@ -129,7 +131,6 @@ EOF
 # TODO:  at_most  
   
   before(:all) do
-    
     @solr_resp_1_doc = RSpecSolr::SolrResponseHash.new({ "response" =>
                           { "numFound" => 5, 
                             "start" => 0, 
@@ -157,7 +158,5 @@ EOF
                           }
                         }) 
   end
-  
-  
   
 end
