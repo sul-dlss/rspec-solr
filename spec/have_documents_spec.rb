@@ -3,6 +3,8 @@ require 'rspec-solr'
 
 describe RSpecSolr do
 
+  # fixtures below
+
   context "have_documents with no doc matcher" do
     it "passes if response.should has documents" do
       @solr_resp_w_docs.should have_documents
@@ -70,7 +72,5 @@ describe RSpecSolr do
                           }
                         } 
   end
-  
-  
   
 end
