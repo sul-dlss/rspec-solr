@@ -1,18 +1,19 @@
 require 'delegate'
-# # NAOMI_MUST_COMMENT_THIS_MODULE
+
 class RSpecSolr
-  # # NAOMI_MUST_COMMENT_THIS_CLASS
+  
+  # Subclass Hash so we can use RSpec matchers for number of documents:
+  #   my_solr_resp_hash.should have(3).documents
+  #   my_solr_resp_hash.should have_at_least(3).documents
   class SolrResponseHash < DelegateClass(Hash)
-    # @param Hash a Solr response 
-#    def initialize(solr_resp_as_hash)
-#      @orig_solr_resp = solr_resp_as_hash
-#    end
+
     
-    # NAOMI_MUST_COMMENT_THIS_METHOD
+    # override Hash size method so we can use RSpec matchers for number of documents:
+    #   my_solr_resp_hash.should have(3).documents
+    #   my_solr_resp_hash.should have_at_least(3).documents
     def size
       self["response"]["docs"].size
     end
-
 
   end
 end
