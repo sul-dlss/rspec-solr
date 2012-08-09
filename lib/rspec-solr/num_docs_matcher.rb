@@ -13,6 +13,15 @@ module RSpecSolr::Matchers
   else
     raise NameError, "Cannot find Spec (rspec 1.x) or RSpec (rspec 2.x)"
   end
+  
+  # NAOMI_MUST_COMMENT_THIS_METHOD
+  def comparators
+    @comparators ||= {
+      :exactly => "", 
+      :at_least => "at least ",
+      :at_most => "at most "
+    }
+  end
 
   # Define .have(n).documents
   # Determine if the receiver (a Solr response object) has the expected number of documents
