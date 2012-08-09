@@ -165,9 +165,28 @@ EOF
     end
   end
   
+  it "should pass according to total Solr docs matching the query, not the number of docs in THIS response" do
+    solr_resp = RSpecSolr::SolrResponseHash.new({ "response" =>
+                          { "numFound" => 3, 
+                            "start" => 0, 
+                            "rows" => 1,
+                            "docs" => [ {"id"=>"111"} ]
+                          }
+                        })
+    solr_resp.should have(3).documents
+    solr_resp.should_not have(1).document
+    solr_resp = RSpecSolr::SolrResponseHash.new({ "response" =>
+                          { "numFound" => 3, 
+                            "start" => 0, 
+                            "rows" => 0 
+                          }
+                        })
+    solr_resp.should have(3).documents
+  end
+  
   before(:all) do
     @solr_resp_1_doc = RSpecSolr::SolrResponseHash.new({ "response" =>
-                          { "numFound" => 5, 
+                          { "numFound" => 1, 
                             "start" => 0, 
                             "docs" => [ {"id"=>"111"} ]
                           }
