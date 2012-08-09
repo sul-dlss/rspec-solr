@@ -21,13 +21,23 @@ describe RSpecSolr do
       [1,2,3].should include(3)
       [1,2,3].should include(2,3)
       [1,2,3].should_not include(4)
-#      [1,2,3].should_not include(1,4)
+      lambda {
+        [1,2,3].should include(1,666)
+      }.should fail
+      lambda {
+        [1,2,3].should_not include(1,666)
+      }.should fail
     end
     
     it "for Hash" do
       {:key => 'value'}.should include(:key)
       {:key => 'value'}.should_not include(:key2)
-#      {:key => 'value'}.should_not include(:key, :key2)
+      lambda {
+        {:key => 'value'}.should include(:key, :other)
+      }.should fail
+      lambda {
+        {:key => 'value'}.should_not include(:key, :other)
+      }.should fail
       {'key' => 'value'}.should include('key')
       {'key' => 'value'}.should_not include('key2')
     end
