@@ -19,20 +19,20 @@ describe RSpecSolr::SolrResponseHash do
                           })
     end
     
-    it "should be true when single document meets requirement" do
+    it "should be true when single document meets expectation" do
       @solr_resp_5_docs.should have_document({"id" => "222"})
       @solr_resp_5_docs.should have_document({"id" => "111", "fld" => "val"})
     end
     
-    it "should be true when at least one doc meets param" do
+    it "should be true when at least one doc meets expectation" do
       @solr_resp_5_docs.should have_document({"fld" => "val"})
     end
     
-    it "should be false when no docs meet requirement" do
-      @solr_resp_5_docs.should_not have_document({"id" => "666"})
+    it "should be false when no docs meet expectation" do
+      @solr_resp_5_docs.should_not have_document({"id" => "not_there"})
     end
     
-    it "should be false when only part of requirement is met" do
+    it "should be false when only part of expectation is met" do
       @solr_resp_5_docs.should_not have_document({"id" => "222", "fld" => "val"})
     end   
   end  
