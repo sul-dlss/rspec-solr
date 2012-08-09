@@ -22,7 +22,10 @@ Note:  this is about the total number of Solr documents that match ("numFound"),
 * have_at_most(3).documents
 
 === Usage
+* rspec-solr_resp_hash.should have(3).documents
+* rspec-solr_resp_hash.should_not have(2).documents
 * rspec-solr_resp_hash.should have_at_least(3).documents
+* rspec-solr_resp_hash.should have_at_most(4).documents
 
 == MATCHING SPECIFIC DOCUMENTS IN RESPONSE
 
