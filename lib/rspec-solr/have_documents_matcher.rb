@@ -28,7 +28,7 @@ module RSpecSolr::Matchers
       if !document_matcher
         solr_resp["response"]["docs"].size > 0
       else
-# TODO: test this
+# TODO: test this?  remove in favor of include?
         solr_resp.documents.any? { |doc| document_matcher.include? doc }
       end
     end
@@ -37,7 +37,7 @@ module RSpecSolr::Matchers
       if !document_matcher
         "expected documents in Solr response #{solr_resp["response"]}"
       else
-# TODO: test this
+# TODO: test this?  remove in favor of include?
         "expected documents #{document_matcher.to_s} in #{solr_resp["response"]["docs"]}"
       end
       
@@ -47,14 +47,14 @@ module RSpecSolr::Matchers
       if !document_matcher
         "did not expect documents, but Solr response had #{solr_resp["response"]["docs"]}"
       else
-# TODO: test this
+# TODO: test this?  remove in favor of include?
         "did not expect #{document_matcher.to_s} to be in #{solr_resp["response"]["docs"]}"
       end
     end
     
   end  # define :have_documents
 
-# TODO: does below work?
+# TODO: does below work?    remove in favor of include?
 
   def document finders = {}
     DocumentFinder.new finders
