@@ -94,6 +94,7 @@ describe RSpecSolr do
   context "should have_at_least(n).documents" do
     it "passes if target response has n documents" do
       @solr_resp_5_docs.should have_at_least(5).documents
+      @solr_resp_1_doc.should have_at_least(1).document
       @solr_resp_no_docs.should have_at_least(0).documents
     end
     
@@ -125,10 +126,44 @@ We recommend that you use this instead:
   should have_at_most(5).documents
 EOF
     end
-    
   end
-  
-# TODO:  at_most  
+    
+  context "should have_at_most(n).documents" do
+    it "passes if target response has n documents" do
+      @solr_resp_5_docs.should have_at_most(5).documents
+      @solr_resp_1_doc.should have_at_most(1).document
+      @solr_resp_no_docs.should have_at_most(0).documents
+    end
+
+    it "passes if target response has < n documents" do
+      @solr_resp_5_docs.should have_at_most(6).documents
+      @solr_resp_no_docs.should have_at_most(1).document
+    end
+
+    it "fails if target response has > n documents" do
+      lambda {
+        @solr_resp_5_docs.should have_at_most(4).documents
+      }.should fail_matching("expected at most 4 documents, got 5")
+      lambda {
+        @solr_resp_1_doc.should have_at_most(0).documents
+      }.should fail_matching("expected at most 0 documents, got 1")
+    end
+
+    it "provides educational negative failure messages" do
+      # given
+      my_matcher = have_at_most(4).documents
+      # when
+      my_matcher.matches?(@solr_resp_5_docs)
+      # then 
+      my_matcher.failure_message_for_should_not.should eq <<-EOF
+Isn't life confusing enough?
+Instead of having to figure out the meaning of this:
+  should_not have_at_most(4).documents
+We recommend that you use this instead:
+  should have_at_least(5).documents
+EOF
+    end
+  end
   
   before(:all) do
     @solr_resp_1_doc = RSpecSolr::SolrResponseHash.new({ "response" =>
