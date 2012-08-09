@@ -34,9 +34,7 @@ describe RSpecSolr::SolrResponseHash do
     
     it "should be false when only part of requirement is met" do
       @solr_resp_5_docs.should_not have_document({"id" => "222", "fld" => "val"})
-    end
-        
+    end   
   end  
-
   
 end
