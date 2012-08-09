@@ -1,6 +1,5 @@
-require "rspec-solr/have_docs_matcher"
-#require "rspec-solr/num_docs_matcher"
 require "rspec-solr/solr_response_hash"
+require "rspec-solr/have_documents_matcher"
 
 module RSpecSolr::Matchers
 
