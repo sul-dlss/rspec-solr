@@ -29,13 +29,6 @@ Note:  this is about the total number of Solr documents that match ("numFound"),
 
 == MATCHING SPECIFIC DOCUMENTS IN RESPONSE
 
-=== Specifying Documents
-* document(:fldname => "value")
-* document("idval")  # value of the unique id field in the solr document
-* documents(:fldname => ["val1, val2, val3"])
-* document(:fld1 => "val1", :fld2 => "val2")   # doc must meet both predicates
-* document(:fldname => "/regex/")
-
 === Matchers
 * include document() 
 * include documents()   # if array, should_not implies NONE of them should be included
@@ -44,6 +37,14 @@ Note:  this is about the total number of Solr documents that match ("numFound"),
 * include_at_least(3).of_these_documents().in_first(3).results
 
 === Usage
+==== Specifying Documents
+* document("fldname" => "value")
+* document("fld1" => "val1", "fld2" => "val2")   # doc must meet both predicates
+* documents("fldname" => ["val1", "val2", "val3"])
+
+* document("idval")  # value of the unique id field in the solr document
+* document("fldname" => "/regex/")
+==== full examples
 * rspec-solr_resp_hash.should_include document()
 * rspec-solr_resp_hash.should include_document()
 * rspec-solr_resp_hash.should include document()
