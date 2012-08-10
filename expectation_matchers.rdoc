@@ -4,6 +4,8 @@
 
 == MATCHING WHETHER RESPONSE HAS DOCUMENTS OR NOT
 
+ FIXME!!!!  is this about the total number of Solr documents that match ("numFound"), NOT solely the documents returned in the response
+
 === Matcher
 * have_documents
 
@@ -13,7 +15,7 @@
 
 == MATCHING NUMBER OF DOCUMENTS 
 
-Note:  this is about the total number of Solr documents that match ("numFound"), NOT solely the documents returned in the response
+ NOTE:  this is about the total number of Solr documents that match ("numFound"), NOT solely the documents returned in the response
 
 === Matchers
 * have(2).documents
@@ -30,28 +32,38 @@ Note:  this is about the total number of Solr documents that match ("numFound"),
 == MATCHING SPECIFIC DOCUMENTS IN RESPONSE
 
 === Matchers
-* include document() 
-* include documents()   # if array, should_not implies NONE of them should be included
-* include_document().in_first(2).results
-* include_documents().in_first(4).results
+the following are interchangeable:
+* include()
+* have_document()  
+TODO:
+* include(Array).in_first(n).results  (specify a series of docids)
+* include().in_first(2).results
 * include_at_least(3).of_these_documents().in_first(3).results
 
 === Usage
-==== Specifying Documents
-* document("fldname" => "value")
-* document("fld1" => "val1", "fld2" => "val2")   # doc must meet both predicates
-* documents("fldname" => ["val1", "val2", "val3"])
-
-* document("idval")  # value of the unique id field in the solr document
+==== Specifying Single Document
+* ("idval") 
+ NOTE: value of the unique id field (defaults to 'id') in the Solr document
+       To change the id field name, use my_solr_response_hash.id_field='my_id_fldname'
+* ("fldname" => "value")
+* ("fld1" => "val1", "fld2" => "val2")
+ NOTE: single Solr document must have all key value pairs
+* ("fldname" => ["val1", "val2", "val3"])
+ NOTE: all of the Array values must be present for the fld in a single Solr document
+       should_not for Array implies NONE of the values should be present in a single document
+TODO:
 * document("fldname" => "/regex/")
-==== full examples
-* rspec-solr_resp_hash.should_include document()
-* rspec-solr_resp_hash.should include_document()
-* rspec-solr_resp_hash.should include document()
-* ... have ...
+==== TODO: Specifying Multiple Documents
+
+==== Full Examples
+* rspec-solr_resp_hash.should have_document("fld1" => "val1")
+* rspec-solr_resp_hash.should have_document("f1" => "v1", "f2" => ["val1", "val2", "val3"])
+* rspec-solr_resp_hash.should include("idval")
 
 
-== ORDER OF DOCUMENTS
+
+
+== TODO: ORDER OF DOCUMENTS
 
 === Potential Syntax:
 * rspec-solr_resp_hash.document().should come_before_document()
@@ -69,7 +81,7 @@ Note:  this is about the total number of Solr documents that match ("numFound"),
 * include_document().within(3)_positions_of_document()
 
 
-== FACET VALUES IN RESPONSE
+== TODO: FACET VALUES IN RESPONSE
 
 === Specifying Facet Values
 * facet(:format => "Book")
@@ -85,7 +97,7 @@ rspec-solr_resp_hash.should include_facet
 * include_facets().before_facets()
 
 
-== COMPARING TWO RESPONSES
+== TODO: COMPARING TWO RESPONSES
 
 === Specifying Second Response
 * than_solr_response({:q => "foo", :sort => "title"})  # solr params
