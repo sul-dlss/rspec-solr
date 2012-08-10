@@ -37,9 +37,10 @@
 the following are interchangeable:
 * include()
 * have_document()  
+* have_documents()  
 TODO:
-* include(Array).in_first(n).results  (specify a series of docids)
-* include().in_first(2).results
+* include().in_first(n).documents
+* include(Array).in_first(n).results 
 * include_at_least(3).of_these_documents().in_first(3).results
 
 === Usage
@@ -56,13 +57,19 @@ TODO:
 TODO:
 * document("fldname" => "/regex/")
 
-==== TODO: Specifying Multiple Documents
+==== Specifying Multiple Documents
+* by id strings: (["id1", "id2", "id3"])
+* by hashes: ([{"title" => "green is best"}, {"title" => "blue is best"}, {"fld" => "val"}])
+NOTE: you cannot do this:  ([{"title" => ["Solr doc 1 title", "Solr doc 2 title"]} ]) to specify multiple documents
+* by mix of id strings and hashes: ([{"title" => "green is best"}, "id3", {"author" => "steinbeck"}])
 
 ==== Full Examples
 * rspec-solr_resp_hash.should have_document("fld1" => "val1")
 * rspec-solr_resp_hash.should have_document("f1" => "v1", "f2" => ["val1", "val2", "val3"])
 * rspec-solr_resp_hash.should include("idval")
-
+* rspec-solr_resp_hash.should include(["id1", "id2", "id3"])
+* rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}])
+* rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}, "id8"])
 
 
 == TODO: MATCHING ORDER OF DOCUMENTS
