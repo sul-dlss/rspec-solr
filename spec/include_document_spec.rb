@@ -356,6 +356,10 @@ describe RSpecSolr do
         end
       end
       
+      it "should allow #have_documents as alternative to #include" do
+        @solr_resp_5_docs.should have_documents(["111", "222", "333"])
+      end
+      
     end # Array argument
 
     
