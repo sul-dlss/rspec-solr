@@ -4,7 +4,7 @@
 
 == MATCHING WHETHER RESPONSE HAS DOCUMENTS OR NOT
 
- FIXME!!!!  is this about the total number of Solr documents that match ("numFound"), NOT solely the documents returned in the response
+ NOTE:  this is about the TOTAL number of Solr documents that match ("numFound"), NOT solely the documents returned in this response
 
 === Matcher
 * have_documents
@@ -15,7 +15,7 @@
 
 == MATCHING NUMBER OF DOCUMENTS 
 
- NOTE:  this is about the total number of Solr documents that match ("numFound"), NOT solely the documents returned in the response
+ NOTE:  this is about the TOTAL number of Solr documents that match ("numFound"), NOT solely the documents returned in this response
 
 === Matchers
 * have(2).documents
@@ -30,6 +30,8 @@
 * rspec-solr_resp_hash.should have_at_most(4).documents
 
 == MATCHING SPECIFIC DOCUMENTS IN RESPONSE
+
+ NOTE:  this is about the Solr documents returned in THIS response
 
 === Matchers
 the following are interchangeable:
@@ -62,8 +64,7 @@ TODO:
 
 
 
-
-== TODO: ORDER OF DOCUMENTS
+== TODO: MATCHING ORDER OF DOCUMENTS
 
 === Potential Syntax:
 * rspec-solr_resp_hash.document().should come_before_document()
@@ -81,7 +82,7 @@ TODO:
 * include_document().within(3)_positions_of_document()
 
 
-== TODO: FACET VALUES IN RESPONSE
+== TODO: MATCHING FACET VALUES IN RESPONSE
 
 === Specifying Facet Values
 * facet(:format => "Book")
