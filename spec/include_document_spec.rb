@@ -177,24 +177,24 @@ describe RSpecSolr do
           }.should fail
         end
         it "fails if string doesn't match non-default id_field in the SolrResponseHash object" do
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
           lambda {
-            my_srh = @solr_resp_5_docs.clone
-            my_srh.id_field='fld2'
             my_srh.should have_document('val')
           }.should fail
         end    
       end # should
 
-      context "should_NOT include (single_string_arg)" do
+      context "should_NOT include(single_string_arg)" do
         it "fails if string matches default id_field of Solr document in the response" do
           lambda {
             @solr_resp_5_docs.should_not have_document('111')
           }.should fail
         end
         it "fails if string matches non-default id_field in the SolrResponseHash object" do
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
           lambda {
-            my_srh = @solr_resp_5_docs.clone
-            my_srh.id_field='fld2'
             my_srh.should_not have_document('val2')
           }.should fail
         end
@@ -209,6 +209,101 @@ describe RSpecSolr do
       end # should_not
       
     end # single String arg
+
+    context "Array argument" do
+      
+      context "should include(Array_of_Strings)" do
+        it "passes if all Strings in Array match all Solr documents' id_field in the response" do
+          @solr_resp_5_docs.should include(["111", "222", "333", "444", "555"])
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          my_srh.should include(["val2"])
+        end
+        it "passes if all Strings in Array match some Solr documents' id_field in the response" do
+          @solr_resp_5_docs.should include(["111", "222", "333"])
+          @solr_resp_5_docs.should include(["111"])
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld'
+          my_srh.should include(["val"])
+        end
+        it "fails if no Strings in Array match Solr documents' id_field in the response" do
+          lambda { 
+            @solr_resp_5_docs.should include(["888", "899"])
+          }.should fail
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          lambda { 
+            my_srh.should include(["val8", "val9"])
+          }.should fail
+        end
+        it "fails if only some Strings in Array match Solr documents' id_field in the response" do
+          lambda {           
+            @solr_resp_5_docs.should include(["111", "222", "999"])
+          }.should fail
+          lambda { 
+            @solr_resp_5_docs.should include(["666", "555"])
+          }.should fail
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          lambda { 
+            my_srh.should include(["val2", "val9"])
+          }.should fail
+        end
+      end # should include(Array_of_Strings)
+      
+      context "should_NOT include(Array_of_Strings)" do
+        it "fails if all Strings in Array match all Solr documents' id_field in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not include(["111", "222", "333", "444", "555"])
+          }.should fail
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          lambda {
+            my_srh.should_not include(["val2"])
+          }.should fail
+        end
+        it "fails if all Strings in Array match some Solr documents' id_field in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not include(["111", "222", "333"])
+          }.should fail
+          lambda {
+            @solr_resp_5_docs.should_not include(["111"])
+          }.should fail
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld'
+          lambda {
+            my_srh.should_not include(["val"])
+          }.should fail
+        end
+        it "passes if no Strings in Array match Solr documents' id_field in the response" do
+          @solr_resp_5_docs.should_not include(["888", "899"])
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          my_srh.should_not include(["val8", "val9"])
+        end
+        it "passes if only some Strings in Array match Solr documents' id_field in the response" do
+          @solr_resp_5_docs.should_not include(["111", "222", "999"])
+          @solr_resp_5_docs.should_not include(["666", "555"])
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          my_srh.should_not include(["val2", "val9"])
+        end
+      end # should_not include(Array_of_Strings)
+      
+      context "should include(Array_of_Hashes)" do
+        it "does something" do
+          pending "to be implemented"
+        end
+      end # should include(Array_of_Hashes)
+      
+      context "should_NOT include(Array_of_Hashes)" do
+        it "does something" do
+          pending "to be implemented"
+        end
+        
+      end # should_not include(Array_of_Hashes)
+      
+    end # Array argument
 
     
     context "regex value" do
