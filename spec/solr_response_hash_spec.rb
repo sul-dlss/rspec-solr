@@ -3,6 +3,29 @@ require 'rspec-solr'
 
 describe RSpecSolr::SolrResponseHash do
   
+  context "id field" do
+    before(:all) do
+      @srh = RSpecSolr::SolrResponseHash.new({ "response" =>
+                            { "docs" => 
+                                [ {"id"=>"111"}, 
+                                  {"not_id"=>"222"}, 
+                                  {"id"=>"333"}, 
+                                ]
+                            }
+                          })
+    end
+    it "should default to 'id'" do
+      RSpecSolr::SolrResponseHash.new({}).id_field.should == "id"
+      @srh.id_field.should == "id"
+    end
+    it "should be changable to whatever" do
+      @srh.id_field='new'
+      @srh.id_field.should == 'new'
+      @srh.id_field='newer'
+      @srh.id_field.should == 'newer'
+    end
+  end
+  
   context "has_document?" do
     before(:all) do
       @solr_resp_5_docs = RSpecSolr::SolrResponseHash.new({ "response" =>

@@ -3,8 +3,6 @@ require 'rspec-solr'
 
 describe RSpecSolr do
   
-# FIXME:  YOU ARE HERE!!!   You are about to re-org this so it's more compact and clear  
-  
   context "RSpecSolr::SolrResponseHash #include matcher" do
     
     context "should include('fldname'=>'fldval')" do
@@ -13,17 +11,14 @@ describe RSpecSolr do
         @solr_resp_5_docs.should include("id" => "111")
         @solr_resp_5_docs.should include("fld" => "val")  # 2 docs match 
       end
-      
       it "passes if single value expectation is expressed as an Array" do
         @solr_resp_5_docs.should include("id" => ["111"])
       end
-      
       it "fails if no Solr document in response has 'fldval' for the named field" do
         lambda {
           @solr_resp_5_docs.should have_document("id" => "not_there")
         }.should fail
       end
-      
       it "fails if no Solr document in response has the named field" do
         lambda {
           @solr_resp_5_docs.should have_document("not_there" => "anything")
@@ -44,15 +39,12 @@ describe RSpecSolr do
           @solr_resp_5_docs.should_not include("fld" => "val") 
         }.should fail
       end
-      
       it "passes if no Solr document in response has 'fldval' for the named field" do
           @solr_resp_5_docs.should_not have_document({"id" => "not_there"})
       end
-      
       it "passes if no Solr document in response has the named field" do
           @solr_resp_5_docs.should_not have_document({"not_there" => "anything"})
       end
-      
       it "passes if single field value is expressed as Array" do
         @solr_resp_5_docs.should_not have_document({"id" => ["not_there"]})
       end
@@ -64,7 +56,6 @@ describe RSpecSolr do
         @solr_resp_5_docs.should include("id" => "111", "fld" => "val")
         @solr_resp_5_docs.should include("id" => "333", "fld" => "val")
       end
-      
       it "fails if only part of expectation is met" do
         lambda {
           @solr_resp_5_docs.should include("id" => "111", "fld" => "not_there")
@@ -76,7 +67,6 @@ describe RSpecSolr do
           @solr_resp_5_docs.should include("id" => "222", "fld" => "val")
         }.should fail
       end
-      
       it "fails if no part of expectation is met" do
         lambda {
           @solr_resp_5_docs.should include("id" => "not_there", "not_there" => "anything")
@@ -91,13 +81,11 @@ describe RSpecSolr do
           @solr_resp_5_docs.should_not include("id" => "333", "fld" => "val")
         }.should fail
       end
-      
       it "passes if a Solr document in the response contains all the key/value pairs among others" do
         lambda {
           @solr_resp_5_docs.should_not include("id" => "111", "fld" => "val")
         }.should fail
       end
-      
       it "fails if part of the expectation is met" do
         lambda {
           @solr_resp_5_docs.should include("id" => "111", "fld" => "not_there")
@@ -109,7 +97,6 @@ describe RSpecSolr do
           @solr_resp_5_docs.should include("id" => "222", "fld" => "val")
         }.should fail
       end
-      
       it "passes if no part of the expectatio is met" do
         @solr_resp_5_docs.should_not include("id" => "not_there", "not_there" => "anything")
       end
@@ -120,22 +107,19 @@ describe RSpecSolr do
       
       context "should include(doc_exp)" do
         it "passes if all the expected values match all the values in a Solr document in the response" do
-          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "val3"])
+          @solr_resp_5_docs.should include("fld" => ["val1", "val2", "val3"])
           @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "val3"], "id" => "444")
         end
-
         it "passes if all the expected values match some of the values in a Solr document in the response" do
           @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"])
-          @solr_resp_5_docs.should have_document("fld" => "val1")
+          @solr_resp_5_docs.should include("fld" => "val1")
           @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"], "id" => "444")
         end
-
         it "fails if none of the expected values match the values in a Solr document in the response" do
           lambda {
             @solr_resp_5_docs.should have_document("fld" => ["not_there", "also_not_there"])
           }.should fail
         end
-
         it "fails if only some of the expected values match the values in a Solr document in the response" do
           lambda {
             @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "not_there"])
@@ -152,7 +136,6 @@ describe RSpecSolr do
             @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "val3"], "id" => "444")
           }.should fail
         end
-        
         it "fails if all the expected values match some of the values in a Solr document in the response" do
           lambda {
             @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"])
@@ -164,39 +147,79 @@ describe RSpecSolr do
             @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"], "id" => "444")
           }.should fail
         end
-        
         it "passes if none of the expected values match the values in a Solr document in the response" do
           @solr_resp_5_docs.should_not have_document("fld" => ["not_there", "also_not_there"])
           @solr_resp_5_docs.should_not have_document("fld" => ["not_there", "also_not_there"], "id" => "444")
         end
-        
         it "passes if only some of the expected values match the values in a Solr document in the response" do
           @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "not_there"])
           @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "not_there"], "id" => "444")
         end
-        
       end # should_not    
   
     end # multi-valued fields in docs
     
     
-    context "should include(single_string_arg)" do
-      it "does something" do
-        pending "to be implemented"
-      end
-    end
+    context "single String argument" do
+      
+      context "should include(single_string_arg)" do
+        it "passes if string matches default id_field of Solr document in the response" do
+          @solr_resp_5_docs.should have_document('111')
+        end
+        it "passes if string matches non-default id_field in the SolrResponseHash object" do
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          my_srh.should have_document('val2')
+        end
+        it "fails if string does not match default id_field of Solr document in the response" do
+          lambda {
+            @solr_resp_5_docs.should have_document('666')
+          }.should fail
+        end
+        it "fails if string doesn't match non-default id_field in the SolrResponseHash object" do
+          lambda {
+            my_srh = @solr_resp_5_docs.clone
+            my_srh.id_field='fld2'
+            my_srh.should have_document('val')
+          }.should fail
+        end    
+      end # should
+
+      context "should_NOT include (single_string_arg)" do
+        it "fails if string matches default id_field of Solr document in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not have_document('111')
+          }.should fail
+        end
+        it "fails if string matches non-default id_field in the SolrResponseHash object" do
+          lambda {
+            my_srh = @solr_resp_5_docs.clone
+            my_srh.id_field='fld2'
+            my_srh.should_not have_document('val2')
+          }.should fail
+        end
+        it "passes if string does not match default id_field of Solr document in the response" do
+          @solr_resp_5_docs.should_not have_document('666')
+        end
+        it "fails if string doesn't match non-default id_field in the SolrResponseHash object" do
+          my_srh = @solr_resp_5_docs.clone
+          my_srh.id_field='fld2'
+          my_srh.should_not have_document('val')
+        end    
+      end # should_not
+      
+    end # single String arg
+
     
-    context "should include(:key => [val1, val2, val3])" do
-      it "does something" do
-        pending "to be implemented"
+    context "regex value" do
+
+      context 'should include(:key => "/regex/")' do
+        it "does something" do
+          pending "to be implemented"
+        end
       end
-    end
-    
-    context 'should include(:key => "/regex/")' do
-      it "does something" do
-        pending "to be implemented"
-      end
-    end
+
+    end # regex value
 
 
     before(:all) do
