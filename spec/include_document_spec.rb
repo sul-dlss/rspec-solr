@@ -341,6 +341,20 @@ describe RSpecSolr do
         end
         
       end # should_not include(Array_of_Hashes)
+
+      context "mixed Array of Strings and Hashes" do
+        it "passes if all elements of Array pass" do
+          @solr_resp_5_docs.should include([ "222", {"id"=>"111", "fld"=>"val"}, "555"  ])
+        end
+        it "fails if any element of Array fails" do
+          lambda { 
+            @solr_resp_5_docs.should include([ "not_there", {"id"=>"111", "fld"=>"val"}, "555"  ])
+          }.should fail
+          lambda { 
+            @solr_resp_5_docs.should include([ "222", {"id"=>"111", "not"=>"there"}, "555"  ])
+          }.should fail
+        end
+      end
       
     end # Array argument
 

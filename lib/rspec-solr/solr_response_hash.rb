@@ -25,14 +25,17 @@ class RSpecSolr
       # NOT:  self["response"]["docs"].size  # number of Solr docs returned in THIS response
     end
     
-    # @param expected_doc [Hash] key-val pairs indicating what should be matched in a document in the response
-    # @example Expected Doc Hash
+    # @param expected_doc what should be matched in a document in THIS response
+    # @example expected_doc Hash implies ALL key/value pairs will be matched in a SINGLE Solr document
     #   {"id" => "666"}
     #   {"subject" => ["warm fuzzies", "fluffy"]}
     #   {"title" => "warm fuzzies", "subject" => ["puppies"]}
-    # @example Expected Doc String 
+    # @example expected_doc String 
     #   "666"  implies  {'id' => '666'}  when id_field is 'id'
-    # @return true if this Solr Response contains a document hash which contains all the key-val pairs in the expected_doc
+    # @example expected_doc Array
+    #   ["1", "2", "3"]  implies we expect Solr docs with ids 1, 2, 3 included in this response
+    #   [{"title" => "warm fuzzies"}, {"title" => "cool fuzzies"}]  implies we expect at least one Solr doc in this response matching each Hash in the Array
+    # @return true if this Solr Response contains document(s) as indicated by expected_doc
     def has_document?(expected_doc)
       if expected_doc.is_a?(Hash)
         # we are happy if any doc meets all of our expectations
@@ -49,7 +52,10 @@ class RSpecSolr
         }
       elsif expected_doc.is_a?(String)
         has_document?({self.id_field => expected_doc})
+      elsif expected_doc.is_a?(Array)
+        expected_doc.all? { |exp| has_document?(exp) }
       end
+      
     end
     
     # access the Array of Hashes representing the Solr documents in the response
