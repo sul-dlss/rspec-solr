@@ -33,9 +33,6 @@ describe RSpecSolr do
           @solr_resp_5_docs.should_not include("id" => "111")
         }.should fail
         lambda {
-          @solr_resp_5_docs.should_not include("id" => "111", "fld" => "val")
-        }.should fail
-        lambda {
           @solr_resp_5_docs.should_not include("fld" => "val") 
         }.should fail
       end
@@ -291,14 +288,56 @@ describe RSpecSolr do
       end # should_not include(Array_of_Strings)
       
       context "should include(Array_of_Hashes)" do
-        it "does something" do
-          pending "to be implemented"
+        it "passes if all Hashes in Array match all Solr documents in the response" do
+          @solr_resp_5_docs.should include([{"id"=>"111", "fld"=>"val", "fld2"=>"val2"}, 
+                                            {"id"=>"222"}, 
+                                            {"id"=>"333", "fld"=>"val"}, 
+                                            {"id"=>"444", "fld"=>["val1", "val2", "val3"]}, 
+                                            {"id"=>"555"}])
+          @solr_resp_5_docs.should include([{"id"=>"111"}, {"id"=>"222"}, {"id"=>"333"}, {"id"=>"444"}, {"id"=>"555"}])
+        end
+        it "passes if all Hashes in Array match some Solr documents in the response" do
+          @solr_resp_5_docs.should include([{"id"=>"333", "fld"=>"val"}, {"id"=>"111", "fld2"=>"val2"}])
+          @solr_resp_5_docs.should include([{"fld"=>"val"}])
+        end
+        it "fails if no Hashes in Array match Solr documents in the response" do
+          lambda {
+            @solr_resp_5_docs.should include([{"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}])
+          }.should fail
+        end
+        it "fails if only some Hashes in Array match Solr documents in the response" do
+          lambda {
+            @solr_resp_5_docs.should include([{"id"=>"222"}, {"id"=>"333", "fld"=>"val"}, {"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}])
+          }.should fail
         end
       end # should include(Array_of_Hashes)
-      
+
       context "should_NOT include(Array_of_Hashes)" do
-        it "does something" do
-          pending "to be implemented"
+        it "fails if all Hashes in Array match all Solr documents in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not include([{"id"=>"111", "fld"=>"val", "fld2"=>"val2"}, 
+                                            {"id"=>"222"}, 
+                                            {"id"=>"333", "fld"=>"val"}, 
+                                            {"id"=>"444", "fld"=>["val1", "val2", "val3"]}, 
+                                            {"id"=>"555"}])
+          }.should fail
+          lambda {
+            @solr_resp_5_docs.should_not include([{"id"=>"111"}, {"id"=>"222"}, {"id"=>"333"}, {"id"=>"444"}, {"id"=>"555"}])
+          }.should fail
+        end
+        it "fails if all Hashes in Array match some Solr documents in the response" do
+          lambda {
+            @solr_resp_5_docs.should_not include([{"id"=>"333", "fld"=>"val"}, {"id"=>"111", "fld2"=>"val2"}])
+          }.should fail
+          lambda {
+            @solr_resp_5_docs.should_not include([{"fld"=>"val"}])
+          }.should fail
+        end
+        it "passes if no Hashes in Array match Solr documents in the response" do
+          @solr_resp_5_docs.should_not include([{"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}])
+        end
+        it "passes if only some Hashes in Array match Solr documents in the response" do
+          @solr_resp_5_docs.should_not include([{"id"=>"222"}, {"id"=>"333", "fld"=>"val"}, {"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}])
         end
         
       end # should_not include(Array_of_Hashes)
