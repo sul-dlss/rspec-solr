@@ -1,4 +1,4 @@
-= SolrTestFramework Custom Matchers for RSpec
+= RSpec-Solr Matchers for RSpec-Solr::SolrResponseHash
 
 (rspec-solr_resp_hash..should ...  or rspec-solr_resp_hash..should_not ...)
 
