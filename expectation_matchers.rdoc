@@ -94,7 +94,9 @@ See above for information on how to specify specific documents
 * rspec-solr_resp_hash.should include("fld1" => "val1").in_first(3)
 
 
-== MATCHING ORDER OF DOCUMENTS
+== MATCHING ORDER OF SPECIFIC DOCUMENTS
+
+ NOTE:  this is about the Solr documents returned in THIS response
 
 === Matcher
 * include().before()
@@ -111,6 +113,8 @@ TODO: Potential Syntax:
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}]).before("title" => "title3")
 
 == TODO: MATCHING FACET VALUES IN RESPONSE
+
+ NOTE:  this is about the facet values returned in THIS response
 
 === Specifying Facet Values
 * facet(:format => "Book")
