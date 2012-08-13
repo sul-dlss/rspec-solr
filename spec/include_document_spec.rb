@@ -3,6 +3,8 @@ require 'rspec-solr'
 
 describe RSpecSolr do
   
+  # fixtures below
+  
   context "RSpecSolr::SolrResponseHash #include matcher" do
     
     context "should include('fldname'=>'fldval')" do
