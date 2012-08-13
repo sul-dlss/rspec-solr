@@ -34,20 +34,15 @@
  NOTE:  this is about the Solr documents returned in THIS response
 
 === Matchers
-the following are interchangeable:
 * include()
-* have_document()  
-* have_documents()  
-TODO:
-* include().in_first(n).documents
-* include(Array).in_first(n).results 
-* include_at_least(3).of_these_documents().in_first(3).results
 
 === Usage
 ==== Specifying Single Document
+===== String
 * ("idval") 
  NOTE: value of the unique id field (defaults to 'id') in the Solr document
        To change the id field name, use my_solr_response_hash.id_field='my_id_fldname'
+===== Hash
 * ("fldname" => "value")
 * ("fld1" => "val1", "fld2" => "val2")
  NOTE: single Solr document must have all key value pairs
@@ -56,20 +51,47 @@ TODO:
        should_not for Array implies NONE of the values should be present in a single document
 TODO:
 * document("fldname" => "/regex/")
+* include_title("val")  include_[any_field_name]("val")
 
 ==== Specifying Multiple Documents
+===== Array
 * by id strings: (["id1", "id2", "id3"])
 * by hashes: ([{"title" => "green is best"}, {"title" => "blue is best"}, {"fld" => "val"}])
-NOTE: you cannot do this:  ([{"title" => ["Solr doc 1 title", "Solr doc 2 title"]} ]) to specify multiple documents
+ NOTE: you cannot do this:  ([{"title" => ["Solr doc 1 title", "Solr doc 2 title"]} ]) to specify multiple documents
 * by mix of id strings and hashes: ([{"title" => "green is best"}, "id3", {"author" => "steinbeck"}])
 
 ==== Full Examples
-* rspec-solr_resp_hash.should have_document("fld1" => "val1")
-* rspec-solr_resp_hash.should have_document("f1" => "v1", "f2" => ["val1", "val2", "val3"])
+* rspec-solr_resp_hash.should include("fld1" => "val1")
+* rspec-solr_resp_hash.should include("f1" => "v1", "f2" => ["val1", "val2", "val3"])
 * rspec-solr_resp_hash.should include("idval")
 * rspec-solr_resp_hash.should include(["id1", "id2", "id3"])
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}])
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}, "id8"])
+
+== MATCHING SPECIFIC DOCUMENTS OCCURRING IN FIRST N RESULTS 
+
+ NOTE:  this is about the Solr documents returned in THIS response
+
+=== Matchers
+* include().as_first
+* include().as_first.document
+* include().as_first.results
+* include().as_first.anything.can.go.here
+* include().in_first(n)
+* include().in_first(n).documents
+* include().in_first(n).results
+* include().in_first(n).anything_can_go_here
+* include(Array).in_first(n).results 
+
+TODO:
+* include_at_least(3).of_these_documents().in_first(3).results
+
+=== Usage
+See above for information on how to specify specific documents
+* rspec-solr_resp_hash.should include("111").as_first.document
+* rspec-solr_resp_hash.should include(["111", "222"]).as_first.documents
+* rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}]).in_first(3).results
+* rspec-solr_resp_hash.should include("fld1" => "val1").in_first(3)
 
 
 == TODO: MATCHING ORDER OF DOCUMENTS
