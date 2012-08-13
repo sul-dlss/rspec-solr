@@ -33,7 +33,7 @@
 
  NOTE:  this is about the Solr documents returned in THIS response
 
-=== Matchers
+=== Matcher
 * include()
 
 === Usage
@@ -94,23 +94,21 @@ See above for information on how to specify specific documents
 * rspec-solr_resp_hash.should include("fld1" => "val1").in_first(3)
 
 
-== TODO: MATCHING ORDER OF DOCUMENTS
+== MATCHING ORDER OF DOCUMENTS
 
-=== Potential Syntax:
-* rspec-solr_resp_hash.document().should come_before_document()
-* rspec-solr_resp_hash.document().should come_before_document()
-* rspec-solr_resp_hash.should include_document().before_document()
+=== Matcher
+* include().before()
+** documents are specified the same way inside the parens (see above re: specifying documents)
+
+TODO: Potential Syntax:
 * subject.document(:title => 'vala').should come_before(subject.document(:title =>'valb'))
 * subject.should have_result_field_ordered("title", "vala", "valb") 
-
-=== Matchers
-* include_document().before_document()
-* include_documents().before_document()
-* include_document().before_documents()
-* include_documents().before_documents()
-
 * include_document().within(3)_positions_of_document()
 
+=== Usage
+* rspec-solr_resp_hash.should include("111").before("222")
+* rspec-solr_resp_hash.should include("fld"=>"val").before("fld"=>["val1", "val2", "val3"])
+* rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}]).before("title" => "title3")
 
 == TODO: MATCHING FACET VALUES IN RESPONSE
 
