@@ -27,7 +27,6 @@ module RSpec
         # override failure message for improved readability
         def failure_message_for_should
           assert_ivars :@actual, :@expected
-
           if @before_expected
             "expected #{@actual.inspect} to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}"
           elsif @max_doc_position
@@ -60,6 +59,9 @@ private
                 before_ix = actuals.get_first_doc_index(@before_expected)
                 if before_ix
                   @max_doc_position = before_ix + 1
+                else
+                  # make the desired result impossible
+                  @max_doc_position = -1
                 end
               end
               actuals.has_document?(expected, @max_doc_position)

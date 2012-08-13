@@ -6,6 +6,7 @@ describe RSpecSolr do
   # fixtures below
   
   context "should include().before()" do
+    
     it "passes when criteria are met" do
       @solr_resp_5_docs.should include("111").before("222")
       @solr_resp_5_docs.should include("333").before("fld"=>["val1", "val2", "val3"])
@@ -35,8 +36,12 @@ describe RSpecSolr do
         @solr_resp_5_docs.should include("not_there").before("still_not_there")
       }.should fail_matching('} to include document "not_there" before document matching "still_not_there"')
     end
+    
   end # should include().before()
+  
+  
   context "should_NOT include().before()" do
+    
     it "fails when criteria are met" do
       lambda {
         @solr_resp_5_docs.should_not include("111").before("222")
