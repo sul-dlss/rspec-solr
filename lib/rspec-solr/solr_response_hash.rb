@@ -35,8 +35,9 @@ class RSpecSolr
     # @example expected_doc Array
     #   ["1", "2", "3"]  implies we expect Solr docs with ids 1, 2, 3 included in this response
     #   [{"title" => "warm fuzzies"}, {"title" => "cool fuzzies"}]  implies we expect at least one Solr doc in this response matching each Hash in the Array
+    # @param [FixNum] max_doc_position maximum acceptable position of document in results.  (e.g. if 2, it must be the 1st or 2nd doc in the results)
     # @return true if this Solr Response contains document(s) as indicated by expected_doc
-    def has_document?(expected_doc)
+    def has_document?(expected_doc, max_doc_position = nil)
       if expected_doc.is_a?(Hash)
         # we are happy if any doc meets all of our expectations
         docs.any? { |doc| 
@@ -47,13 +48,15 @@ class RSpecSolr
               Array(exp_vals).all? { | exp_val |
                 # a doc's fld values can be a String or an Array
                 Array(doc[exp_fname]).include?(exp_val)
-            }
+              } &&
+              # satisfy doc's position in the results
+              (max_doc_position ? docs.find_index(doc) < max_doc_position : true)
           }
         }
       elsif expected_doc.is_a?(String)
-        has_document?({self.id_field => expected_doc})
+        has_document?({self.id_field => expected_doc}, max_doc_position)
       elsif expected_doc.is_a?(Array)
-        expected_doc.all? { |exp| has_document?(exp) }
+        expected_doc.all? { |exp| has_document?(exp, max_doc_position) }
       end
       
     end

@@ -57,7 +57,16 @@ describe RSpecSolr::SolrResponseHash do
     
     it "should be false when only part of expectation is met" do
       @solr_resp_5_docs.should_not have_document({"id" => "222", "fld" => "val"})
-    end   
+    end  
+    
+    it "should be true when document is < =  expected position in results" do
+      @solr_resp_5_docs.should have_document({"id" => "222"}, 2)
+    end
+    
+    it "should be false when document is > expected position in results" do
+      @solr_resp_5_docs.should_not have_document({"id" => "222"}, 1)
+    end
+     
   end  
   
 end
