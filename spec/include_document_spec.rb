@@ -18,13 +18,13 @@ describe RSpecSolr do
       end
       it "fails if no Solr document in response has 'fldval' for the named field" do
         lambda {
-          @solr_resp_5_docs.should have_document("id" => "not_there")
-        }.should fail
+          @solr_resp_5_docs.should include("id" => "not_there")
+        }.should fail_matching('} to include {"id"=>"not_there"}')
       end
       it "fails if no Solr document in response has the named field" do
         lambda {
-          @solr_resp_5_docs.should have_document("not_there" => "anything")
-        }.should fail
+          @solr_resp_5_docs.should include("not_there" => "anything")
+          }.should fail_matching('} to include {"not_there"=>"anything"}')
       end
     end # "should include('fldname'=>'fldval')"
 
@@ -33,19 +33,19 @@ describe RSpecSolr do
       it "fails if Solr document in response contains 'fldval' in named field" do
         lambda {
           @solr_resp_5_docs.should_not include("id" => "111")
-        }.should fail
+        }.should fail_matching('not to include {"id"=>"111"}')
         lambda {
           @solr_resp_5_docs.should_not include("fld" => "val") 
-        }.should fail
+        }.should fail_matching('not to include {"fld"=>"val"}')
       end
       it "passes if no Solr document in response has 'fldval' for the named field" do
-          @solr_resp_5_docs.should_not have_document({"id" => "not_there"})
+          @solr_resp_5_docs.should_not include({"id" => "not_there"})
       end
       it "passes if no Solr document in response has the named field" do
-          @solr_resp_5_docs.should_not have_document({"not_there" => "anything"})
+          @solr_resp_5_docs.should_not include({"not_there" => "anything"})
       end
       it "passes if single field value is expressed as Array" do
-        @solr_resp_5_docs.should_not have_document({"id" => ["not_there"]})
+        @solr_resp_5_docs.should_not include({"id" => ["not_there"]})
       end
     end # "should_not include('fldname'=>'fldval')"
 
@@ -58,18 +58,18 @@ describe RSpecSolr do
       it "fails if only part of expectation is met" do
         lambda {
           @solr_resp_5_docs.should include("id" => "111", "fld" => "not_there")
-        }.should fail
+        }.should fail_matching('} to include {"id"=>"111", "fld"=>"not_there"}')
         lambda {
           @solr_resp_5_docs.should include("id" => "111", "not_there" => "whatever")
-        }.should fail
+        }.should fail_matching('} to include {"id"=>"111", "not_there"=>"whatever"}')
         lambda {
           @solr_resp_5_docs.should include("id" => "222", "fld" => "val")
-        }.should fail
+        }.should fail_matching('} to include {"id"=>"222", "fld"=>"val"}')
       end
       it "fails if no part of expectation is met" do
         lambda {
           @solr_resp_5_docs.should include("id" => "not_there", "not_there" => "anything")
-        }.should fail
+        }.should fail_matching('} to include {"id"=>"not_there", "not_there"=>"anything"}')
       end
     end # should include('fld1'=>'val1', 'fld2'=>'val2')
 
@@ -78,23 +78,23 @@ describe RSpecSolr do
       it "fails if a Solr document in the response contains all the key/value pairs" do
         lambda {
           @solr_resp_5_docs.should_not include("id" => "333", "fld" => "val")
-        }.should fail
+        }.should fail_matching('not to include {"id"=>"333", "fld"=>"val"}')
       end
       it "passes if a Solr document in the response contains all the key/value pairs among others" do
         lambda {
           @solr_resp_5_docs.should_not include("id" => "111", "fld" => "val")
-        }.should fail
+          }.should fail_matching('not to include {"id"=>"111", "fld"=>"val"}')
       end
       it "fails if part of the expectation is met" do
         lambda {
-          @solr_resp_5_docs.should include("id" => "111", "fld" => "not_there")
-        }.should fail
+          @solr_resp_5_docs.should_not include("id" => "111", "fld" => "not_there")
+        }.should fail_matching('not to include {"id"=>"111", "fld"=>"not_there"}')
         lambda {
-          @solr_resp_5_docs.should include("id" => "111", "not_there" => "whatever")
-        }.should fail
+          @solr_resp_5_docs.should_not include("id" => "111", "not_there" => "whatever")
+          }.should fail_matching('not to include {"id"=>"111", "not_there"=>"whatever"}')
         lambda {
-          @solr_resp_5_docs.should include("id" => "222", "fld" => "val")
-        }.should fail
+          @solr_resp_5_docs.should_not include("id" => "222", "fld" => "val")
+          }.should fail_matching('not to include {"id"=>"222", "fld"=>"val"}')
       end
       it "passes if no part of the expectatio is met" do
         @solr_resp_5_docs.should_not include("id" => "not_there", "not_there" => "anything")
@@ -107,52 +107,52 @@ describe RSpecSolr do
       context "should include(doc_exp)" do
         it "passes if all the expected values match all the values in a Solr document in the response" do
           @solr_resp_5_docs.should include("fld" => ["val1", "val2", "val3"])
-          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "val3"], "id" => "444")
+          @solr_resp_5_docs.should include("fld" => ["val1", "val2", "val3"], "id" => "444")
         end
         it "passes if all the expected values match some of the values in a Solr document in the response" do
-          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"])
+          @solr_resp_5_docs.should include("fld" => ["val1", "val2"])
           @solr_resp_5_docs.should include("fld" => "val1")
-          @solr_resp_5_docs.should have_document("fld" => ["val1", "val2"], "id" => "444")
+          @solr_resp_5_docs.should include("fld" => ["val1", "val2"], "id" => "444")
         end
         it "fails if none of the expected values match the values in a Solr document in the response" do
           lambda {
-            @solr_resp_5_docs.should have_document("fld" => ["not_there", "also_not_there"])
-          }.should fail
+            @solr_resp_5_docs.should include("fld" => ["not_there", "also_not_there"])
+            }.should fail_matching('} to include {"fld"=>["not_there", "also_not_there"]}')
         end
         it "fails if only some of the expected values match the values in a Solr document in the response" do
           lambda {
-            @solr_resp_5_docs.should have_document("fld" => ["val1", "val2", "not_there"])
-          }.should fail
+            @solr_resp_5_docs.should include("fld" => ["val1", "val2", "not_there"])
+            }.should fail_matching('} to include {"fld"=>["val1", "val2", "not_there"]}')
         end
       end # should
       
       context "should_NOT include(doc_exp)" do
         it "fails if all the expected values match all the values in a Solr document in the response" do
           lambda {
-            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "val3"])
-          }.should fail
+            @solr_resp_5_docs.should_not include("fld" => ["val1", "val2", "val3"])
+          }.should fail_matching('not to include {"fld"=>["val1", "val2", "val3"]}')
           lambda {
-            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "val3"], "id" => "444")
-          }.should fail
+            @solr_resp_5_docs.should_not include("fld" => ["val1", "val2", "val3"], "id" => "444")
+            }.should fail_matching('not to include {"fld"=>["val1", "val2", "val3"], "id"=>"444"}')
         end
         it "fails if all the expected values match some of the values in a Solr document in the response" do
           lambda {
-            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"])
-          }.should fail
+            @solr_resp_5_docs.should_not include("fld" => ["val1", "val2"])
+          }.should fail_matching('not to include {"fld"=>["val1", "val2"]}')
           lambda {
-            @solr_resp_5_docs.should_not have_document("fld" => "val1")
-          }.should fail
+            @solr_resp_5_docs.should_not include("fld" => "val1")
+            }.should fail_matching('not to include {"fld"=>"val1"}')
           lambda {
-            @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2"], "id" => "444")
-          }.should fail
+            @solr_resp_5_docs.should_not include("fld" => ["val1", "val2"], "id" => "444")
+            }.should fail_matching('not to include {"fld"=>["val1", "val2"], "id"=>"444"}')
         end
         it "passes if none of the expected values match the values in a Solr document in the response" do
-          @solr_resp_5_docs.should_not have_document("fld" => ["not_there", "also_not_there"])
-          @solr_resp_5_docs.should_not have_document("fld" => ["not_there", "also_not_there"], "id" => "444")
+          @solr_resp_5_docs.should_not include("fld" => ["not_there", "also_not_there"])
+          @solr_resp_5_docs.should_not include("fld" => ["not_there", "also_not_there"], "id" => "444")
         end
         it "passes if only some of the expected values match the values in a Solr document in the response" do
-          @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "not_there"])
-          @solr_resp_5_docs.should_not have_document("fld" => ["val1", "val2", "not_there"], "id" => "444")
+          @solr_resp_5_docs.should_not include("fld" => ["val1", "val2", "not_there"])
+          @solr_resp_5_docs.should_not include("fld" => ["val1", "val2", "not_there"], "id" => "444")
         end
       end # should_not    
   
@@ -163,47 +163,47 @@ describe RSpecSolr do
       
       context "should include(single_string_arg)" do
         it "passes if string matches default id_field of Solr document in the response" do
-          @solr_resp_5_docs.should have_document('111')
+          @solr_resp_5_docs.should include('111')
         end
         it "passes if string matches non-default id_field in the SolrResponseHash object" do
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
-          my_srh.should have_document('val2')
+          my_srh.should include('val2')
         end
         it "fails if string does not match default id_field of Solr document in the response" do
           lambda {
-            @solr_resp_5_docs.should have_document('666')
-          }.should fail
+            @solr_resp_5_docs.should include('666')
+            }.should fail_matching('} to include "666"')
         end
         it "fails if string doesn't match non-default id_field in the SolrResponseHash object" do
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
           lambda {
-            my_srh.should have_document('val')
-          }.should fail
+            my_srh.should include('val')
+          }.should fail_matching('} to include "val"')
         end    
       end # should
 
       context "should_NOT include(single_string_arg)" do
         it "fails if string matches default id_field of Solr document in the response" do
           lambda {
-            @solr_resp_5_docs.should_not have_document('111')
-          }.should fail
+            @solr_resp_5_docs.should_not include('111')
+          }.should fail_matching('not to include "111"')
         end
         it "fails if string matches non-default id_field in the SolrResponseHash object" do
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
           lambda {
-            my_srh.should_not have_document('val2')
-          }.should fail
+            my_srh.should_not include('val2')
+          }.should fail_matching('not to include "val2"')
         end
         it "passes if string does not match default id_field of Solr document in the response" do
-          @solr_resp_5_docs.should_not have_document('666')
+          @solr_resp_5_docs.should_not include('666')
         end
         it "fails if string doesn't match non-default id_field in the SolrResponseHash object" do
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
-          my_srh.should_not have_document('val')
+          my_srh.should_not include('val')
         end    
       end # should_not
       
@@ -228,25 +228,25 @@ describe RSpecSolr do
         it "fails if no Strings in Array match Solr documents' id_field in the response" do
           lambda { 
             @solr_resp_5_docs.should include(["888", "899"])
-          }.should fail
+          }.should fail_matching ('} to include ["888", "899"]')
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
           lambda { 
             my_srh.should include(["val8", "val9"])
-          }.should fail
+          }.should fail_matching ('} to include ["val8", "val9"]')
         end
         it "fails if only some Strings in Array match Solr documents' id_field in the response" do
           lambda {           
             @solr_resp_5_docs.should include(["111", "222", "999"])
-          }.should fail
+          }.should fail_matching('} to include ["111", "222", "999"]')
           lambda { 
             @solr_resp_5_docs.should include(["666", "555"])
-          }.should fail
+          }.should fail_matching('} to include ["666", "555"]')
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
           lambda { 
             my_srh.should include(["val2", "val9"])
-          }.should fail
+          }.should fail_matching('} to include ["val2", "val9"]')
         end
       end # should include(Array_of_Strings)
       
@@ -254,17 +254,17 @@ describe RSpecSolr do
         it "fails if all Strings in Array match all Solr documents' id_field in the response" do
           lambda {
             @solr_resp_5_docs.should_not include(["111", "222", "333", "444", "555"])
-          }.should fail
+          }.should fail_matching('not to include ["111", "222", "333", "444", "555"]')
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field='fld2'
           lambda {
             my_srh.should_not include(["val2"])
-          }.should fail
+          }.should fail_matching('not to include ["val2"]')
         end
         it "fails if all Strings in Array match some Solr documents' id_field in the response" do
           lambda {
             @solr_resp_5_docs.should_not include(["111", "222", "333"])
-          }.should fail
+          }.should fail_matching('not to include ["111", "222", "333"]')
           lambda {
             @solr_resp_5_docs.should_not include(["111"])
           }.should fail
@@ -272,7 +272,7 @@ describe RSpecSolr do
           my_srh.id_field='fld'
           lambda {
             my_srh.should_not include(["val"])
-          }.should fail
+          }.should fail_matching('not to include ["val"]')
         end
         it "passes if no Strings in Array match Solr documents' id_field in the response" do
           @solr_resp_5_docs.should_not include(["888", "899"])
@@ -305,12 +305,12 @@ describe RSpecSolr do
         it "fails if no Hashes in Array match Solr documents in the response" do
           lambda {
             @solr_resp_5_docs.should include([{"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}])
-          }.should fail
+          }.should fail_matching('} to include [{"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}]')
         end
         it "fails if only some Hashes in Array match Solr documents in the response" do
           lambda {
             @solr_resp_5_docs.should include([{"id"=>"222"}, {"id"=>"333", "fld"=>"val"}, {"foo"=>"bar"}, {"bar"=>"food", "mmm"=>"food"}])
-          }.should fail
+          }.should fail_matching('} to include [{"id"=>"222"},')
         end
       end # should include(Array_of_Hashes)
 
@@ -325,12 +325,12 @@ describe RSpecSolr do
           }.should fail
           lambda {
             @solr_resp_5_docs.should_not include([{"id"=>"111"}, {"id"=>"222"}, {"id"=>"333"}, {"id"=>"444"}, {"id"=>"555"}])
-          }.should fail
+          }.should fail_matching('not to include [{"id"=>"111"},')
         end
         it "fails if all Hashes in Array match some Solr documents in the response" do
           lambda {
             @solr_resp_5_docs.should_not include([{"id"=>"333", "fld"=>"val"}, {"id"=>"111", "fld2"=>"val2"}])
-          }.should fail
+          }.should fail_matching('not to include [{"id"=>"333",')
           lambda {
             @solr_resp_5_docs.should_not include([{"fld"=>"val"}])
           }.should fail
@@ -351,10 +351,10 @@ describe RSpecSolr do
         it "fails if any element of Array fails" do
           lambda { 
             @solr_resp_5_docs.should include([ "not_there", {"id"=>"111", "fld"=>"val"}, "555"  ])
-          }.should fail
+          }.should fail_matching('} to include [')
           lambda { 
             @solr_resp_5_docs.should include([ "222", {"id"=>"111", "not"=>"there"}, "555"  ])
-          }.should fail
+          }.should fail_matching('} to include [')
         end
       end
       
