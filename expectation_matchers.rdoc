@@ -113,6 +113,29 @@ TODO: Potential Syntax:
 * rspec-solr_resp_hash.should include("fld"=>"val").before("fld"=>["val1", "val2", "val3"])
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}]).before("title" => "title3")
 
+
+== TODO: COMPARING TOTAL RESULTS OF TWO RESPONSES
+
+ NOTE:  this is about the TOTAL number of Solr documents that match ("numFound"), NOT solely the documents returned in THESE responses
+
+=== Matchers
+* have_more_results_than()
+* have_fewer_results_than()
+* have_the_same_number_of_results_as()
+
+=== Usage
+* rspec-solr_resp_hash1.should have_more_results_than(rspec-solr_resp_hash2)
+* rspec-solr_resp_hash1.should have_fewer_results_than(rspec-solr_resp_hash2)
+* rspec-solr_resp_hash1.should have_the_same_number_of_results_as(rspec-solr_resp_hash2)
+
+==== Alternate (allows more granularity)
+* rspec-solr_resp_hash1.size.should > rspec-solr_resp_hash2.size
+* rspec-solr_resp_hash1.size.should >= rspec-solr_resp_hash2.size
+* rspec-solr_resp_hash1.size.should < rspec-solr_resp_hash2.size
+* rspec-solr_resp_hash1.size.should <= rspec-solr_resp_hash2.size
+* rspec-solr_resp_hash1.size.should == rspec-solr_resp_hash2.size
+* rspec-solr_resp_hash1.size.should be_within(delta).of(rspec-solr_resp_hash2.size)
+
 == TODO: MATCHING FACET VALUES IN RESPONSE
 
  NOTE:  this is about the facet values returned in THIS response
@@ -131,18 +154,4 @@ rspec-solr_resp_hash.should include_facet
 * include_facet().before_facets()
 * include_facets().before_facets()
 
-
-== TODO: COMPARING TOTAL RESULTS OF TWO RESPONSES
-
-=== Specifying Second Response
-* than_solr_response({:q => "foo", :sort => "title"})  # solr params
-* than_search_for("foo")  # only q is specified, defaults for everything else
-
-=== Potential Syntax
-rspec-solr_resp_hash.should
-
-=== Matchers
-* have_more_results_than_solr_response(:params)
-* have_fewer_results_than_solr_response(:params)
-* have_the_same_number_of_results_as_solr_response(:params)
 
