@@ -21,7 +21,7 @@ class RSpecSolr
     #   my_solr_resp_hash.should have(3).documents
     #   my_solr_resp_hash.should have_at_least(3).documents
     def size
-      self["response"]["numFound"]  # total number of Solr docs matching query
+      self["response"] ? self["response"]["numFound"] : 0  # total number of Solr docs matching query
       # NOT:  self["response"]["docs"].size  # number of Solr docs returned in THIS response
     end
     
