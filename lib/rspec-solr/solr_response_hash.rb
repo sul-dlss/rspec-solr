@@ -105,6 +105,13 @@ class RSpecSolr
       return first_doc_index
     end
 
+    # @return String containing response header and numFound parts of hash for readable output for number of docs messages
+    def num_docs_partial_output_str
+      "{'responseHeader' => #{self['responseHeader'].inspect}, " + 
+        (self['response'] ? "'response' => {'numFound' => #{self['response']['numFound']}, ...}" : "" ) + 
+        " ... }"
+    end
+
 private
     
     # return the minimum of the two arguments.  If one of the arguments is nil, then return the other argument.
