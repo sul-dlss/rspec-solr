@@ -1,9 +1,3 @@
-
-begin
-  require 'rspec-expectations'
-rescue LoadError
-end
-
 # Custom RSpec Matchers for Solr responses
 module RSpecSolr::Matchers
   
