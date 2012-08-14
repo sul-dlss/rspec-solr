@@ -114,7 +114,7 @@ TODO: Potential Syntax:
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}]).before("title" => "title3")
 
 
-== TODO: COMPARING TOTAL RESULTS OF TWO RESPONSES
+== COMPARING TOTAL RESULTS OF TWO RESPONSES
 
  NOTE:  this is about the TOTAL number of Solr documents that match ("numFound"), NOT solely the documents returned in THESE responses
 
@@ -122,6 +122,9 @@ TODO: Potential Syntax:
 * have_more_results_than()
 * have_fewer_results_than()
 * have_the_same_number_of_results_as()
+* have_more_documents_than()
+* have_fewer_documents_than()
+* have_the_same_number_of_documents_as()
 
 === Usage
 * rspec-solr_resp_hash1.should have_more_results_than(rspec-solr_resp_hash2)

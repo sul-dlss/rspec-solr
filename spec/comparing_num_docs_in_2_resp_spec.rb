@@ -198,13 +198,20 @@ describe RSpecSolr do
   end # should_NOT have_more_results_than()
 
 
-
   context "the word documents should be interchangeable with results" do
-    it "does something" do
-      pending "to be implemented"
+    it "have_the_same_number_of_documents_as" do
+      @solr_resp_1_doc.should have_the_same_number_of_documents_as(@solr_resp_1_doc)
+      @solr_resp_not3_docs.should_not have_the_same_number_of_documents_as(@solr_resp_3_docs)
+    end
+    it "have_fewer_results_than" do
+      @solr_resp_3_docs.should have_fewer_results_than(@solr_resp_not3_docs)
+      @solr_resp_many_docs.should_not have_fewer_results_than(@solr_resp_many_docs2)
+    end
+    it "have_more_results_than" do
+      @solr_resp_not3_docs.should have_more_results_than(@solr_resp_3_docs)
+      @solr_resp_1_doc.should_not have_more_documents_than(@solr_resp_3_docs)
     end
   end
-
 
 
   before(:all) do
