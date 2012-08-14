@@ -11,15 +11,22 @@ describe RSpecSolr do
       @solr_resp_5_docs.should include("111").before("222")
       @solr_resp_5_docs.should include("333").before("fld"=>["val1", "val2", "val3"])
       @solr_resp_5_docs.should include("fld"=>"val").before("fld"=>["val1", "val2", "val3"])
+      @solr_resp_5_docs.should include(["111", "222"]).before(["333", "555"])
+      @solr_resp_5_docs.should include([{"id"=>"111"}, {"id"=>"333"}]).before([{"id"=>"444"}, {"id"=>"555"}])
     end
     it "passes when criteria CAN BE met (more than one option)" do
-# FIXME:  before first occurrence of??      
       @solr_resp_5_docs.should include("111").before("fld"=>"val")
     end
     it "fails when docs aren't in expected order" do
       lambda {
         @solr_resp_5_docs.should include("222").before("fld2"=>"val2")
       }.should fail_matching('} to include document "222" before document matching {"fld2"=>"val2"}')
+      lambda {
+        @solr_resp_5_docs.should include("111", "444").before([{"id"=>"333"}, {"id"=>"555"}])
+      }.should fail_matching('} to include documents "111" and "444" before documents matching [{"id"=>"333"}, {"id"=>"555"}]')
+      lambda {
+        @solr_resp_5_docs.should include([{"id"=>"222"}, {"id"=>"444"}]).before([{"id"=>"333"}, {"id"=>"555"}])
+      }.should fail_matching('} to include documents [{"id"=>"222"}, {"id"=>"444"}] before documents matching [{"id"=>"333"}, {"id"=>"555"}]')
     end
     it "fails when it can't find a doc matching first argument(s)" do
       lambda {
@@ -52,6 +59,12 @@ describe RSpecSolr do
       lambda {
         @solr_resp_5_docs.should_not include("fld"=>"val").before("fld"=>["val1", "val2", "val3"])
       }.should fail_matching('not to include document {"fld"=>"val"} before document matching {"fld"=>["val1", "val2", "val3"]}')
+      lambda {
+        @solr_resp_5_docs.should_not include(["111", "222"]).before(["333", "555"])
+      }.should fail_matching('not to include documents ["111", "222"] before documents matching ["333", "555"]')
+      lambda {
+        @solr_resp_5_docs.should_not include([{"id"=>"111"}, {"id"=>"333"}]).before([{"id"=>"444"}, {"id"=>"555"}])
+      }.should fail_matching('not to include documents [{"id"=>"111"}, {"id"=>"333"}] before documents matching [{"id"=>"444"}, {"id"=>"555"}]')
     end
     it "fails when criteria CAN BE met (more than one option)" do
       lambda {
@@ -60,6 +73,9 @@ describe RSpecSolr do
     end
     it "passes when docs aren't in expected order" do
         @solr_resp_5_docs.should_not include("222").before("fld2"=>"val2")
+        # NOTE: it is picky about the next line include() being ["111", "444"], not just "111", "444"
+        @solr_resp_5_docs.should_not include(["111", "444"]).before([{"id"=>"333"}, {"id"=>"555"}])
+        @solr_resp_5_docs.should_not include([{"id"=>"222"}, {"id"=>"444"}]).before([{"id"=>"333"}, {"id"=>"555"}])
     end
     it "passes when it can't find a doc matching first argument(s)" do
       @solr_resp_5_docs.should_not include("not_there").before("555")

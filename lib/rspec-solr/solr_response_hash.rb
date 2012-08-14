@@ -36,7 +36,7 @@ class RSpecSolr
     # @example expected_doc Array
     #   ["1", "2", "3"]  implies we expect Solr docs with ids 1, 2, 3 included in this response
     #   [{"title" => "warm fuzzies"}, {"title" => "cool fuzzies"}]  implies we expect at least one Solr doc in this response matching each Hash in the Array
-    # @param [FixNum] max_doc_position maximum acceptable position of document in results.  (e.g. if 2, it must be the 1st or 2nd doc in the results)
+    # @param [FixNum] max_doc_position maximum acceptable position (1-based) of document in results.  (e.g. if 2, it must be the 1st or 2nd doc in the results)
     def has_document?(expected_doc, max_doc_position = nil)
       if expected_doc.is_a?(Hash)
         # we are happy if any doc meets all of our expectations

@@ -27,6 +27,7 @@ module RSpec
         # override failure message for improved readability
         def failure_message_for_should
           assert_ivars :@actual, :@expected
+# FIXME: DRY up these messages across cases and across should and should_not
           if @before_expected
             "expected #{@actual.inspect} to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}"
           elsif @max_doc_position
