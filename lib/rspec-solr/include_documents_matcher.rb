@@ -1,4 +1,4 @@
-# overriding RSpec::Matchers::Builtin::Include.perform_match method 
+# overriding and adding to RSpec::Matchers::Builtin::Include
 # so we can use RSpec include matcher for document in Solr response
 module RSpec
   module Matchers
