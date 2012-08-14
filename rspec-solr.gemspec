@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   # docs
   gem.add_development_dependency "rdoc"
   gem.add_development_dependency "yard"
-  # tests for this gem
+  # test coverage for this gem
 	gem.add_development_dependency 'simplecov'
 	gem.add_development_dependency 'simplecov-rcov'
 	# continuous integration 
