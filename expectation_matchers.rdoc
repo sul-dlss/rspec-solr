@@ -94,13 +94,13 @@ See above for information on how to specify specific documents
 * rspec-solr_resp_hash.should include("fld1" => "val1").in_first(3)
 
 
-== MATCHING ORDER OF SPECIFIC DOCUMENTS
+== MATCHING RELATIVE ORDER OF SPECIFIC DOCUMENTS
 
  NOTE:  this is about the Solr documents returned in THIS response
 
 === Matcher
 * include().before()
-** documents are specified the same way inside the parens (see above re: specifying documents)
+** documents are specified the same way inside both sets of parens (see below for examples and see above re: specifying documents)
 
 TODO: Potential Syntax:
 * subject.document(:title => 'vala').should come_before(subject.document(:title =>'valb'))
@@ -119,6 +119,7 @@ TODO: Potential Syntax:
 === Specifying Facet Values
 * facet(:format => "Book")
 * facets(:format => ["Image", "Map"])
+*  facets with arrarr and without
 
 === Potential Syntax
 rspec-solr_resp_hash.should include_facet
@@ -130,7 +131,7 @@ rspec-solr_resp_hash.should include_facet
 * include_facets().before_facets()
 
 
-== TODO: COMPARING TWO RESPONSES
+== TODO: COMPARING TOTAL RESULTS OF TWO RESPONSES
 
 === Specifying Second Response
 * than_solr_response({:q => "foo", :sort => "title"})  # solr params

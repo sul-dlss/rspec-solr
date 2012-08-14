@@ -85,16 +85,10 @@ describe RSpecSolr do
           @solr_resp_5_docs.should_not include("id" => "111", "fld" => "val")
           }.should fail_matching('not to include {"id"=>"111", "fld"=>"val"}')
       end
-      it "fails if part of the expectation is met" do
-        lambda {
-          @solr_resp_5_docs.should_not include("id" => "111", "fld" => "not_there")
-        }.should fail_matching('not to include {"id"=>"111", "fld"=>"not_there"}')
-        lambda {
-          @solr_resp_5_docs.should_not include("id" => "111", "not_there" => "whatever")
-          }.should fail_matching('not to include {"id"=>"111", "not_there"=>"whatever"}')
-        lambda {
-          @solr_resp_5_docs.should_not include("id" => "222", "fld" => "val")
-          }.should fail_matching('not to include {"id"=>"222", "fld"=>"val"}')
+      it "passes if part of the expectation is not met" do
+        @solr_resp_5_docs.should_not include("id" => "111", "fld" => "not_there")
+        @solr_resp_5_docs.should_not include("id" => "111", "not_there" => "whatever")
+        @solr_resp_5_docs.should_not include("id" => "222", "fld" => "val")
       end
       it "passes if no part of the expectatio is met" do
         @solr_resp_5_docs.should_not include("id" => "not_there", "not_there" => "anything")
