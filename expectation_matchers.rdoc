@@ -100,7 +100,7 @@ See above for information on how to specify specific documents
 
 === Matcher
 * include().before()
-** documents are specified the same way inside both sets of parens (see below for examples and see above re: specifying documents)
+ NOTE: documents are specified the same way inside both sets of parens (see Usage for examples and see above re: specifying documents)
 
 TODO: Potential Syntax:
 * include().before_first_occurrence_of()
