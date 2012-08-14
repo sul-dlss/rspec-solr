@@ -7,14 +7,6 @@ end
 # Custom RSpec Matchers for Solr responses
 module RSpecSolr::Matchers
   
-  if defined?(::RSpec)
-    rspec_namespace = ::RSpec::Matchers
-  elsif defined?(::Spec)
-    rspec_namespace = ::Spec::Matchers
-  else
-    raise NameError, "Cannot find Spec (rspec 1.x) or RSpec (rspec 2.x)"
-  end
-  
   # Determine if the receiver has Solr documents
   # NOTE:  this is about the TOTAL number of Solr documents matching the query, not solely the number of docs in THIS response
   def have_documents
@@ -25,7 +17,7 @@ module RSpecSolr::Matchers
   # Define .have_documents
   # Determine if the receiver (a Solr response object) has at least one document
   # NOTE:  this is about the TOTAL number of Solr documents matching the query, not solely the number of docs in THIS response
-  rspec_namespace.define :have_documents do 
+  RSpec::Matchers.define :have_documents do 
     match do |solr_resp|
       solr_resp["response"]["numFound"] > 0
     end
