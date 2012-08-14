@@ -22,6 +22,10 @@ Or install it yourself as:
 
 See expecation_matchers.rdoc 
 
+== Ruby Version Compatibility
+
+This should work with various rubies 1.8.7, but currently some tests expected ordered hashes (though the code itself doesn't require them).
+
 == Contributing
 
 1. Fork it
