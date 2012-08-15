@@ -51,7 +51,7 @@
        should_not for Array implies NONE of the values should be present in a single document
 TODO:
 * document("fldname" => "/regex/")
-* include_title("val")  include_[any_field_name]("val")
+* include_title("val") (i.e. include_anyFieldName("val") )
 
 ==== Specifying Multiple Documents
 ===== Array
