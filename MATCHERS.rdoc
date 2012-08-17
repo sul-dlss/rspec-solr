@@ -85,6 +85,7 @@ TODO:
 
 TODO:
 * include_at_least(3).of_these_documents().in_first(3).results
+* start_with()
 
 === Usage
 See above for information on how to specify specific documents

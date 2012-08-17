@@ -20,11 +20,44 @@ Or install it yourself as:
 
 == Usage
 
-See expecation_matchers.rdoc 
+See MATCHERS.rdoc 
+
+Essentially, you write a bunch of specs that
+# send a request to your Solr index
+# wrap the Solr Ruby response into the RSpec-Solr::SolrResponseHash  (basically,  RSpec-Solr::SolrResponseHash.new(orig_resp))
+# utilize the matchers (blah.should have_document("222")) -- see MATCHERS.rdoc
+
+There is an exemplar project utilizing rspec-solr at https://github.com/sul-dlss/sw_index_tests.  Besides the specs themselves, it has essentially 4 files to smooth the way:
+* Rakefile - run various groups of specs from the command line
+* Gemfile - indicate the required gems for bundler
+* spec/spec_helper.rb - one time setup of Solr connection, and methods to make it easier to make desired Solr requests
+* config/solr.yml - your Solr base url goes here
+
+Seriously, that's it.  This allows tests like:
+
+ it "q of 'Buddhism' should get 8,500-10,500 results" do
+   resp = solr_resp_doc_ids_only({'q'=>'Buddhism'})
+   resp.should have_at_least(8500).documents
+   resp.should have_at_most(10500).documents
+ end
+ 
+ it "unstemmed author names should precede stemmed variants" do
+    pending "need regex match"
+    resp = solr_resp_doc_ids_only({'q'=>'Zare', 'qt'=>'search_author', 'fl'=>'id,author_person_display', 'rows'=>'30'})
+    resp.should_not include(":author_person_display" => "Zare").in_first(20).documents
+    resp.should_not include(":author_person_display" => "Zaring, Wilson M.").in_first(20).documents
+    resp.should_not include(":author_person_display" => "Stone, Grace Zaring, 1891-.").in_first(20).documents
+  end
+ 
+  it "Traditional chars 三國誌 should get the same results as simplified chars 三国志" do
+    resp = solr_resp_doc_ids_only({'q'=>'三國誌'})  # 0 in prod, 242 in soc
+    resp.should have_at_least(240).documents
+    resp.should have_the_same_number_of_results_as(solr_resp_doc_ids_only({'q'=>'三国志'})) # 23 in prod, 242 in soc
+  end
 
 == Ruby Version Compatibility
 
-This should work with various rubies 1.8.7, but currently some tests expected ordered hashes (though the code itself doesn't require them).
+This should work with various rubies 1.8.7, but currently some tests expected ordered hashes (though the code itself doesn't require them - just THIS gem's TEST code).
 
 == Contributing
 
@@ -33,3 +66,7 @@ This should work with various rubies 1.8.7, but currently some tests expected or
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+== Releases
+- <b>0.1.1</b> Vastly improve README
+- <b>0.1.0</b> Initial release
