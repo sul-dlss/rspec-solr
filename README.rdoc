@@ -20,20 +20,9 @@ Or install it yourself as:
 
 == Usage
 
-See MATCHERS.rdoc 
+See MATCHERS.rdoc for syntax of supported expectations.
 
-Essentially, you write a bunch of specs that
-* send a request to your Solr index
-* wrap the Solr Ruby response into the RSpec-Solr::SolrResponseHash  (basically,  RSpec-Solr::SolrResponseHash.new(orig_resp))
-* utilize the matchers (blah.should have_document("222")) -- see MATCHERS.rdoc
-
-There is an exemplar project utilizing rspec-solr at https://github.com/sul-dlss/sw_index_tests.  Besides the specs themselves, it has essentially 4 files to smooth the way:
-* Rakefile - run various groups of specs from the command line
-* Gemfile - indicate the required gems for bundler
-* spec/spec_helper.rb - one time setup of Solr connection, and methods to make it easier to make desired Solr requests
-* config/solr.yml - your Solr base url goes here
-
-Seriously, that's it.  This allows tests like:
+=== Examples:
 
  it "q of 'Buddhism' should get 8,500-10,500 results" do
    resp = solr_resp_doc_ids_only({'q'=>'Buddhism'})
@@ -49,15 +38,105 @@ Seriously, that's it.  This allows tests like:
     resp.should_not include(":author_person_display" => "Stone, Grace Zaring, 1891-.").in_first(20).documents
   end
  
-  it "Traditional chars 三國誌 should get the same results as simplified chars 三国志" do
-    resp = solr_resp_doc_ids_only({'q'=>'三國誌'})  # 0 in prod, 242 in soc
+  it "Traditional Chinese chars 三國誌 should get the same results as simplified chars 三国志" do
+    resp = solr_resp_doc_ids_only({'q'=>'三國誌'})  
     resp.should have_at_least(240).documents
-    resp.should have_the_same_number_of_results_as(solr_resp_doc_ids_only({'q'=>'三国志'})) # 23 in prod, 242 in soc
+    resp.should have_the_same_number_of_results_as(solr_resp_doc_ids_only({'q'=>'三国志'})) 
   end
+
+=== How Do I Do That?
+
+Essentially, you write a bunch of specs that
+* send a request to your Solr index
+* wrap the Solr Ruby response into the RSpecSolr::SolrResponseHash  (basically,  RSpecSolr::SolrResponseHash.new(orig_resp))
+* utilize the matchers (blah.should have_document("222")) -- see MATCHERS.rdoc
+
+There is an exemplar project utilizing rspec-solr at https://github.com/sul-dlss/sw_index_tests.  
+
+Besides the specs themselves, it has essentially 4 files to smooth the way.
+
+==== Rakefile
+To run various groups of specs from the command line
+
+ require 'rspec/core/rake_task'
+
+ desc "run specs expected to pass" 
+ RSpec::Core::RakeTask.new(:rspec) do |spec|
+   spec.rspec_opts = ["-c", "-f progress", "-r ./spec/spec_helper.rb"]
+ end
+
+==== Gemfile
+Indicate the required gems for bundler
+
+ source :rubygems
+
+ gem 'RedCloth' 		# for textile formatting used in Readme
+ gem 'rake'
+ gem 'rsolr'       # for sending requests to and getting responses from solr
+ gem 'rspec-solr'  # for rspec assertions against solr response object
+
+==== spec/spec_helper.rb
+For one time setup of Solr connection, and methods to make it easier to make desired Solr requests
+
+  require "yaml"
+  require 'rsolr'
+  
+  $LOAD_PATH.unshift(File.dirname(__FILE__))
+  
+  RSpec.configure do |config|
+    # FIXME:  hardcoded yml group
+    solr_config = YAML::load_file('config/solr.yml')["test"]
+    @@solr = RSolr.connect(solr_config)
+    puts "Solr URL: #{@@solr.uri}"
+  end
+  
+  # send a GET request to the default Solr request handler with the indicated Solr parameters
+  # @param solr_params [Hash] the key/value pairs to be sent to Solr as HTTP parameters, in addition to 
+  #  those to get only id fields and no facets in the response
+  # @return [RSpecSolr::SolrResponseHash] object for rspec-solr testing the Solr response 
+  def solr_resp_doc_ids_only(solr_params)
+    solr_response(solr_params.merge(@@doc_ids_only))
+  end
+  
+  private
+  
+  # send a GET request to the indicated Solr request handler with the indicated Solr parameters
+  # @param solr_params [Hash] the key/value pairs to be sent to Solr as HTTP parameters
+  # @param req_handler [String] the pathname of the desired Solr request handler (defaults to 'select') 
+  # @return [RSpecSolr::SolrResponseHash] object for rspec-solr testing the Solr response 
+  def solr_response(solr_params, req_handler='select')  
+    RSpecSolr::SolrResponseHash.new(@@solr.send_and_receive(req_handler, {:method => :get, :params => solr_params}))
+  end
+  
+  # use these Solr HTTP params to reduce the size of the Solr responses
+  # response documents will only have id fields, and there will be no facets in the response
+  # @return [Hash] Solr HTTP params to reduce the size of the Solr responses
+  def doc_ids_only
+    {'fl'=>'id', 'facet'=>'false'}
+  end
+  
+==== config/solr.yml
+Your Solr base url goes here
+
+ test:
+  :url: http://your_solr_baseurl
+
+ dev:
+   :url: http://your_solr_baseurl
+
+ ci:
+   :url: http://your_solr_baseurl
+
 
 == Ruby Version Compatibility
 
 This should work with various rubies 1.8.7, but currently some tests expected ordered hashes (though the code itself doesn't require them - just THIS gem's TEST code).
+
+== Contribute
+
+I'm currently envisioning helper methods shared somehow - either on the github wikis, or in this gem as exemplars, or in a separate gem, or ...
+
+Please share yours!
 
 == Contributing
 
