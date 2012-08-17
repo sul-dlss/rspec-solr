@@ -55,17 +55,7 @@ There is an exemplar project utilizing rspec-solr at https://github.com/sul-dlss
 
 Besides the specs themselves, it has essentially 4 files to smooth the way.
 
-==== Rakefile
-To run various groups of specs from the command line
-
- require 'rspec/core/rake_task'
-
- desc "run specs expected to pass" 
- RSpec::Core::RakeTask.new(:rspec) do |spec|
-   spec.rspec_opts = ["-c", "-f progress", "-r ./spec/spec_helper.rb"]
- end
-
-==== Gemfile
+==== 1. Gemfile
 Indicate the required gems for bundler
 
  source :rubygems
@@ -75,8 +65,27 @@ Indicate the required gems for bundler
  gem 'rsolr'       # for sending requests to and getting responses from solr
  gem 'rspec-solr'  # for rspec assertions against solr response object
 
-==== spec/spec_helper.rb
-For one time setup of Solr connection, and methods to make it easier to make desired Solr requests
+==== 2. Rakefile
+Make it easy to run various groups of specs from the command line
+
+ require 'rspec/core/rake_task'
+
+ desc "run specs expected to pass" 
+ RSpec::Core::RakeTask.new(:rspec) do |spec|
+   spec.rspec_opts = ["-c", "-f progress", "-r ./spec/spec_helper.rb"]
+ end
+
+==== 3. config/solr.yml
+Your Solr base url goes here
+
+ test:
+  :url: http://your_solr_baseurl
+
+ dev:
+   :url: http://your_solr_baseurl
+
+==== 4. spec/spec_helper.rb
+Do a one time setup of Solr connection, and methods to make it easier to make desired Solr requests
 
   require "yaml"
   require 'rsolr'
@@ -115,18 +124,6 @@ For one time setup of Solr connection, and methods to make it easier to make des
     {'fl'=>'id', 'facet'=>'false'}
   end
   
-==== config/solr.yml
-Your Solr base url goes here
-
- test:
-  :url: http://your_solr_baseurl
-
- dev:
-   :url: http://your_solr_baseurl
-
- ci:
-   :url: http://your_solr_baseurl
-
 
 == Ruby Version Compatibility
 
