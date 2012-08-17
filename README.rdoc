@@ -2,7 +2,7 @@
 
 {<img src="https://secure.travis-ci.org/sul-dlss/rspec-solr.png?branch=master" alt="Build Status" />}[http://travis-ci.org/sul-dlss/rspec-solr]
 
-Provides RSpec custom matchers to be used with Solr response objects.
+A Gem to provide RSpec custom matchers to be used with Solr response objects.
 
 == Installation
 
@@ -23,9 +23,9 @@ Or install it yourself as:
 See MATCHERS.rdoc 
 
 Essentially, you write a bunch of specs that
-# send a request to your Solr index
-# wrap the Solr Ruby response into the RSpec-Solr::SolrResponseHash  (basically,  RSpec-Solr::SolrResponseHash.new(orig_resp))
-# utilize the matchers (blah.should have_document("222")) -- see MATCHERS.rdoc
+* send a request to your Solr index
+* wrap the Solr Ruby response into the RSpec-Solr::SolrResponseHash  (basically,  RSpec-Solr::SolrResponseHash.new(orig_resp))
+* utilize the matchers (blah.should have_document("222")) -- see MATCHERS.rdoc
 
 There is an exemplar project utilizing rspec-solr at https://github.com/sul-dlss/sw_index_tests.  Besides the specs themselves, it has essentially 4 files to smooth the way:
 * Rakefile - run various groups of specs from the command line
