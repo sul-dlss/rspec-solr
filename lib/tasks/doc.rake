@@ -11,7 +11,7 @@ begin
     yt.options = ['--output-dir', doc_dest_dir, 
                   '--readme', 'README.rdoc', 
                   '--title', 'RSpec-Solr Documentation', 
-                  '--files', 'expectation_matchers.rdoc']
+                  '--files', 'MATCHERS.rdoc']
   end
 rescue LoadError
   desc "Generate YARD Documentation"

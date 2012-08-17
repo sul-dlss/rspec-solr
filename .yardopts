@@ -1,0 +1,3 @@
+--title 'RSpecSolr Documentation'
+lib/**/*.rb
+README.rdoc MATCHERS.rdoc LICENSE.txt 
