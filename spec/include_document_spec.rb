@@ -93,8 +93,7 @@ describe RSpecSolr do
       it "passes if no part of the expectatio is met" do
         @solr_resp_5_docs.should_not include("id" => "not_there", "not_there" => "anything")
       end
-    end # should_not include('fld1'=>'val1', 'fld2'=>'val2')
-    
+    end # should_not include('fld1'=>'val1', 'fld2'=>'val2')    
     
     context "multi-valued fields and expectations" do
       
@@ -285,7 +284,7 @@ describe RSpecSolr do
       
       context "should include(Array_of_Hashes)" do
         it "passes if all Hashes in Array match all Solr documents in the response" do
-          @solr_resp_5_docs.should include([{"id"=>"111", "fld"=>"val", "fld2"=>"val2"}, 
+          @solr_resp_5_docs.should include([{"id"=>"111", "fld"=>/val/, "fld2"=>"val2"}, 
                                             {"id"=>"222"}, 
                                             {"id"=>"333", "fld"=>"val"}, 
                                             {"id"=>"444", "fld"=>["val1", "val2", "val3"]}, 
@@ -361,11 +360,46 @@ describe RSpecSolr do
     
     context "regex value" do
 
-      context 'should include(:key => "/regex/")' do
-        it "does something" do
-          pending "to be implemented"
+      context "should include('fld' => /regex/)" do
+        it "passes if Solr document in response matches regex in named field" do
+          @solr_resp_5_docs.should include("id" => /\d{3}/)
+          @solr_resp_5_docs.should include("fld" => /^va/)  # 2 docs match 
         end
-      end
+        it "passes if single value expectation is expressed as an Array" do
+          @solr_resp_5_docs.should include("id" => [/111/])
+        end
+        it "fails if no Solr document in response has 'fldval' for the named field" do
+          lambda {
+            @solr_resp_5_docs.should include("id" => /not there/)
+          }.should fail_matching('} to include {"id"=>/not there/}')
+        end
+        it "fails if no Solr document in response has the named field" do
+          lambda {
+            @solr_resp_5_docs.should include("not_there" => /anything/)
+            }.should fail_matching('} to include {"not_there"=>/anything/}')
+        end
+      end # should include('fld' => /regex/)
+
+      context "should_NOT include('fld' => /regex/)" do
+        it "fails if Solr document in response matches regex in named field" do
+          lambda {
+            @solr_resp_5_docs.should_not include("id" => /\d{3}/)
+          }.should fail_matching('not to include {"id"=>/\d{3}/}')
+          lambda {
+            @solr_resp_5_docs.should_not include("fld" => /^va/) 
+          }.should fail_matching('not to include {"fld"=>/^va/}')
+        end
+        it "passes if no Solr document in response has 'fldval' for the named field" do
+            @solr_resp_5_docs.should_not include({"id" => /not there/})
+        end
+        it "passes if no Solr document in response has the named field" do
+            @solr_resp_5_docs.should_not include({"not_there" => /anything/})
+        end
+        it "passes if single field value is expressed as Array" do
+          @solr_resp_5_docs.should_not include({"id" => [/not there/]})
+        end
+
+      end # should_NOT include('fld' => /regex/)
 
     end # regex value
 

@@ -50,7 +50,7 @@ See MATCHERS.rdoc for syntax of supported expectations.
 
 Essentially, you write a bunch of specs that
 * send a request to your Solr index
-* wrap the Solr Ruby response into the RSpecSolr::SolrResponseHash  (basically,  RSpecSolr::SolrResponseHash.new(orig_resp))
+* wrap the Solr Ruby response into the RSpecSolr::SolrResponseHash  (blah = RSpecSolr::SolrResponseHash.new(orig_resp))
 * utilize the matchers (blah.should have_document("222")) -- see MATCHERS.rdoc
 
 There is an exemplar project utilizing rspec-solr at https://github.com/sul-dlss/sw_index_tests.  

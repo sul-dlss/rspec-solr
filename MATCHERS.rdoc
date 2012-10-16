@@ -44,25 +44,26 @@
        To change the id field name, use my_solr_response_hash.id_field='my_id_fldname'
 ===== Hash
 * ("fldname" => "value")
-* ("fld1" => "val1", "fld2" => "val2")
- NOTE: single Solr document must have all key value pairs
-* ("fldname" => ["val1", "val2", "val3"])
+* ("fldname" => /regex_to_match_val/)
+* ("fld1" => "val1", "fld2" => /val2_regex/)
+ NOTE: single Solr document must satisfy all key value pairs
+* ("fldname" => ["val1", /val2_regex/, "val3"])
  NOTE: all of the Array values must be present for the fld in a single Solr document
        should_not for Array implies NONE of the values should be present in a single document
 TODO:
-* document("fldname" => "/regex/")
 * include_title("val") (i.e. include_anyFieldName("val") )
 
 ==== Specifying Multiple Documents
 ===== Array
 * by id strings: (["id1", "id2", "id3"])
-* by hashes: ([{"title" => "green is best"}, {"title" => "blue is best"}, {"fld" => "val"}])
+* by hashes: ([{"title" => "green is best"}, {"title" => /blue/}, {"fld" => "val"}])
  NOTE: you cannot do this:  ([{"title" => ["Solr doc 1 title", "Solr doc 2 title"]} ]) to specify multiple documents
 * by mix of id strings and hashes: ([{"title" => "green is best"}, "id3", {"author" => "steinbeck"}])
 
 ==== Full Examples
 * rspec-solr_resp_hash.should include("fld1" => "val1")
-* rspec-solr_resp_hash.should include("f1" => "v1", "f2" => ["val1", "val2", "val3"])
+* rspec-solr_resp_hash.should include("fld1" => /regex_for_val/)
+* rspec-solr_resp_hash.should include("f1" => "v1", "f2" => ["val1", "val2", /regex_for_val/])
 * rspec-solr_resp_hash.should include("idval")
 * rspec-solr_resp_hash.should include(["id1", "id2", "id3"])
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}])
