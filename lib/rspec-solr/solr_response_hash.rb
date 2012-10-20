@@ -38,32 +38,49 @@ class RSpecSolr
     #   [{"title" => "warm fuzzies"}, {"title" => "cool fuzzies"}]  implies we expect at least one Solr doc in this response matching each Hash in the Array
     #   [{"title" => /rm fuzz/}, {"title" => /^cool/}]  implies we expect at least one Solr doc in this response matching each Hash in the Array
     # @param [FixNum] max_doc_position maximum acceptable position (1-based) of document in results.  (e.g. if 2, it must be the 1st or 2nd doc in the results)
-    def has_document?(expected_doc, max_doc_position = nil)
+    def has_document?(expected_doc, max_doc_position = nil, all_must_match = nil)
       if expected_doc.is_a?(Hash)
-        # we are happy if any doc meets all of our expectations
-        docs.any? { |doc| 
-          expected_doc.all? { | exp_fname, exp_vals |
-            doc.include?(exp_fname) && 
-              # exp_vals can be a String or an Array
-              # if it's an Array, then all expected values must be present
-              Array(exp_vals).all? { | exp_val |
-                # a doc's fld values can be a String or an Array
-                case exp_val
-                  when Regexp
-                    Array(doc[exp_fname]).any? { |val| val =~ exp_val }
-                  else
-                    Array(doc[exp_fname]).include?(exp_val)
-                end
-              } &&
+        if all_must_match
+          first_non_match = docs.find_index { |doc| 
+            !doc_matches_all_criteria(doc, expected_doc)
+          } >= max_doc_position
+        else
+          # we are happy if any doc meets all of our expectations
+          docs.any? { |doc| 
+            doc_matches_all_criteria(doc, expected_doc) &&
               # satisfy doc's position in the results
               (max_doc_position ? docs.find_index(doc) < max_doc_position : true)
           }
-        }
+        end
       elsif expected_doc.is_a?(String)
+        if all_must_match
+          raise ArgumentError, "in_each_of_first(n) requires a Hash argument to include() method"
+        end
         has_document?({self.id_field => expected_doc}, max_doc_position)
       elsif expected_doc.is_a?(Array)
+        if all_must_match
+          raise ArgumentError, "in_each_of_first(n) requires a Hash argument to include() method"
+        end
         expected_doc.all? { |exp| has_document?(exp, max_doc_position) }
       end   
+    end
+
+    # return true if the document contains all the key value pairs in the expectations_hash
+    def doc_matches_all_criteria(doc, expectations_hash)
+      expectations_hash.all? { | exp_fname, exp_vals |
+        doc.include?(exp_fname) && 
+          # exp_vals can be a String or an Array
+          # if it's an Array, then all expected values must be present
+          Array(exp_vals).all? { | exp_val |
+            # a doc's fld values can be a String or an Array
+            case exp_val
+              when Regexp
+                Array(doc[exp_fname]).any? { |val| val =~ exp_val }
+              else
+                Array(doc[exp_fname]).include?(exp_val)
+            end
+          }
+      }
     end
 
     # @return the index of the first document that meets the expectations in THIS response
@@ -109,36 +126,6 @@ class RSpecSolr
       end  
 
       return first_doc_index
-    end
-
-    # @return the index of the last document that meets the expectations in THIS response
-    # @param expected_doc what should be matched in a document in THIS response
-    # @example expected_doc Hash implies ALL key/value pairs will be matched in EACH Solr document 
-    #   {"subject" => ["warm fuzzies", "fluffy"]}
-    #   {"title" => "warm fuzzies", "subject" => ["puppies"]}
-    def get_last_doc_index(expected_doc)
-      if expected_doc.is_a?(Hash)
-        last_doc_index = -1
-        docs.all? { |doc| 
-          expected_doc.all? { | exp_fname, exp_vals |
-            if (doc.include?(exp_fname) && 
-                # exp_vals can be a String or an Array
-                # if it's an Array, then all expected values must be present
-                Array(exp_vals).all? { | exp_val |
-                  # a doc's fld values can be a String or an Array
-                  Array(doc[exp_fname]).include?(exp_val)
-                }) 
-              last_doc_index += 1
-            else
-              return last_doc_index
-            end
-          }
-        }
-      else 
-        return nil
-      end  
-
-      return last_doc_index
     end
 
     # @return String containing response header and numFound parts of hash for readable output for number of docs messages

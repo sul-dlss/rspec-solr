@@ -138,7 +138,7 @@ describe RSpecSolr do
     end
     it "should raise a NoMethodError exception when it gets nonsense after include" do
       expect {
-          @solr_resp.should include("111").bad_method(2)
+        @solr_resp.should include("111").bad_method(2)
       }.to raise_error(NoMethodError, /bad_method/)
     end    
   end # include().in_first().allowed_chained.names

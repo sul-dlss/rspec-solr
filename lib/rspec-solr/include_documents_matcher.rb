@@ -15,6 +15,14 @@ module RSpec
         
         alias_method :as_first, :in_first
         
+        # chain method for .should include().in_each_of_first(n)
+        #  sets @min_for_last_matching_doc_ix for use in perform_match method
+        # @return self - "each method must return self in order to chain methods together"
+        def in_each_of_first(num=1)
+          @min_for_last_matching_doc_pos = num
+          self
+        end
+        
         # chain method for .should include().before()
         #  sets @before_expected for use in perform_match method
         # @return self - "each method must return self in order to chain methods together"
@@ -30,6 +38,8 @@ module RSpec
 # FIXME: DRY up these messages across cases and across should and should_not
           if @before_expected
             "expected #{@actual.inspect} to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}"
+          elsif @min_for_last_matching_doc_pos
+            "expected each of the first #{@min_for_last_matching_doc_pos.to_s} documents to #{name_to_sentence}#{expected_to_sentence}: #{@actual.inspect}"
           elsif @max_doc_position
             "expected #{@actual.inspect} to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results"
           else
@@ -42,6 +52,8 @@ module RSpec
           assert_ivars :@actual, :@expected
           if @before_expected
             "expected #{@actual.inspect} not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}"
+          elsif @min_for_last_matching_doc_pos
+            "expected some of the first #{@min_for_last_matching_doc_pos.to_s} documents not to #{name_to_sentence}#{expected_to_sentence}: #{@actual.inspect}"
           elsif @max_doc_position
             "expected #{@actual.inspect} not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results"
           else
@@ -65,7 +77,11 @@ private
                   @max_doc_position = -1
                 end
               end
-              actuals.has_document?(expected, @max_doc_position)
+              if @min_for_last_matching_doc_pos 
+                actuals.has_document?(expected, @min_for_last_matching_doc_pos, true)
+              else
+                actuals.has_document?(expected, @max_doc_position)
+              end
             elsif comparing_hash_values?(actuals, expected)
               expected.send(hash_predicate) {|k,v| actuals[k] == v}
             elsif comparing_hash_keys?(actuals, expected)
