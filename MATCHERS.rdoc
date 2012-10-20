@@ -76,15 +76,15 @@ TODO:
 === Matchers
 * include().as_first
 * include().as_first.document
-* include().as_first.documents
-* include().as_first.result
-* include().as_first.results
 * include().in_first(n)
-* include().in_first(n).document
-* include().in_first(n).documents
-* include().in_first(n).result
-* include().in_first(n).results
 * include(Array).in_first(n).results 
+* include(Hash).in_each_of_first(n).documents
+
+Note that the following are equivalent:
+* include().blah.document
+* include().blah.documents
+* include().blah.result
+* include().blah.results
 
 TODO:
 * include_at_least(3).of_these_documents().in_first(3).results
@@ -96,6 +96,7 @@ See above for information on how to specify specific documents
 * rspec-solr_resp_hash.should include(["111", "222"]).as_first.documents
 * rspec-solr_resp_hash.should include([{"title" => "title1"}, {"title" => "title2"}]).in_first(3).results
 * rspec-solr_resp_hash.should include("fld1" => "val1").in_first(3)
+* rspec-solr_resp_hash.should include("title" => /cooking/).in_first(3).results
 
 
 == MATCHING RELATIVE ORDER OF SPECIFIC DOCUMENTS
