@@ -110,13 +110,12 @@ describe RSpecSolr do
     end
   end # include().in_first (no n set)
   
-  context "#include().in_first(n).any_chained.names" do
-    context "should #include().in_first(n).any_chained.names" do
+  context "#include().in_first(n).allowed_chained.names" do
+    context "should #include().in_first(n).allowed_chained.names" do
       it "passes when document(s) meet criteria" do
         @solr_resp_5_docs.should include("222").in_first(2).results
         @solr_resp_5_docs.should include("222").in_first(2).documents
-        @solr_resp_5_docs.should include("222").in_first(2).solr.documents
-        @solr_resp_5_docs.should include("fld2"=>"val2").in_first.solr.document
+        @solr_resp_5_docs.should include("fld2"=>"val2").in_first.document
       end
       it "fails when document(s) don't meet criteria" do
         lambda {
@@ -124,20 +123,25 @@ describe RSpecSolr do
         }.should fail_matching('} to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
       end
     end
-    context "should_NOT #include().in_first(n).any_chained.names" do
+    context "should_NOT #include().in_first(n).allowed_chained.names" do
       it "fails when document(s) meet criteria" do
         lambda {
-          @solr_resp_5_docs.should_not include("222").in_first(2).solr.documents
+          @solr_resp_5_docs.should_not include("222").in_first(2).documents
         }.should fail_matching('not to include document "222" in first 2 ')
         lambda {
-          @solr_resp_5_docs.should_not include("fld2"=>"val2").in_first.solr.document
+          @solr_resp_5_docs.should_not include("fld2"=>"val2").in_first.document
         }.should fail_matching('not to include document {"fld2"=>"val2"} in first 1')
       end
       it "passes when document(s) don't meet criteria" do
         @solr_resp_5_docs.should_not include("fld"=>["val1", "val2", "val3"]).in_first.result
       end
     end
-  end # include().in_first().any_chained_names
+    it "should raise a NoMethodError exception when it gets nonsense after include" do
+      expect {
+          @solr_resp.should include("111").bad_method(2)
+      }.to raise_error(NoMethodError, /bad_method/)
+    end    
+  end # include().in_first().allowed_chained.names
   
   context "#include().as_first" do
     context "should include().as_first" do
@@ -183,12 +187,12 @@ describe RSpecSolr do
   end
   
   
-  context "#include().as_first().any_chained.names" do
-    context "should #include().as_first(n).any_chained.names" do
+  context "#include().as_first().allowed_chained.names" do
+    context "should #include().as_first(n).allowed_chained.names" do
       it "passes when document(s) meet criteria" do
         @solr_resp_5_docs.should include(["111", "222"]).as_first(2).results
-        @solr_resp_5_docs.should include(["111", "222"]).as_first(2).solr.documents
-        @solr_resp_5_docs.should include("fld2"=>"val2").as_first.solr.document
+        @solr_resp_5_docs.should include(["111", "222"]).as_first(2).documents
+        @solr_resp_5_docs.should include("fld2"=>"val2").as_first.document
       end
       it "fails when document(s) don't meet criteria" do
         lambda {
@@ -199,17 +203,17 @@ describe RSpecSolr do
     context "should_NOT #include().as_first(n).any_chained.names" do
       it "fails when document(s) meet criteria" do
         lambda {
-          @solr_resp_5_docs.should_not include(["111", "222"]).as_first(2).solr.documents
+          @solr_resp_5_docs.should_not include(["111", "222"]).as_first(2).documents
         }.should fail_matching('not to include documents ["111", "222"] in first 2')
         lambda {
-          @solr_resp_5_docs.should_not include("fld2"=>"val2").as_first.solr.document
+          @solr_resp_5_docs.should_not include("fld2"=>"val2").as_first.document
         }.should fail_matching('not to include document {"fld2"=>"val2"} in first 1')
       end
       it "passes when document(s) don't meet criteria" do
         @solr_resp_5_docs.should_not include("fld"=>["val1", "val2", "val3"]).as_first.result
       end
     end
-  end # include().as_first().any_chained_names
+  end # include().as_first().allowed_chained.names
 
   before(:all) do
     @solr_resp_5_docs = RSpecSolr::SolrResponseHash.new({ "response" =>

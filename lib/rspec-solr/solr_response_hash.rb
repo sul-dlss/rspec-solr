@@ -111,6 +111,36 @@ class RSpecSolr
       return first_doc_index
     end
 
+    # @return the index of the last document that meets the expectations in THIS response
+    # @param expected_doc what should be matched in a document in THIS response
+    # @example expected_doc Hash implies ALL key/value pairs will be matched in EACH Solr document 
+    #   {"subject" => ["warm fuzzies", "fluffy"]}
+    #   {"title" => "warm fuzzies", "subject" => ["puppies"]}
+    def get_last_doc_index(expected_doc)
+      if expected_doc.is_a?(Hash)
+        last_doc_index = -1
+        docs.all? { |doc| 
+          expected_doc.all? { | exp_fname, exp_vals |
+            if (doc.include?(exp_fname) && 
+                # exp_vals can be a String or an Array
+                # if it's an Array, then all expected values must be present
+                Array(exp_vals).all? { | exp_val |
+                  # a doc's fld values can be a String or an Array
+                  Array(doc[exp_fname]).include?(exp_val)
+                }) 
+              last_doc_index += 1
+            else
+              return last_doc_index
+            end
+          }
+        }
+      else 
+        return nil
+      end  
+
+      return last_doc_index
+    end
+
     # @return String containing response header and numFound parts of hash for readable output for number of docs messages
     def num_docs_partial_output_str
       "{'responseHeader' => #{self['responseHeader'].inspect}, " + 

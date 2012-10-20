@@ -76,12 +76,14 @@ TODO:
 === Matchers
 * include().as_first
 * include().as_first.document
+* include().as_first.documents
+* include().as_first.result
 * include().as_first.results
-* include().as_first.anything.can.go.here
 * include().in_first(n)
+* include().in_first(n).document
 * include().in_first(n).documents
+* include().in_first(n).result
 * include().in_first(n).results
-* include().in_first(n).anything_can_go_here
 * include(Array).in_first(n).results 
 
 TODO:

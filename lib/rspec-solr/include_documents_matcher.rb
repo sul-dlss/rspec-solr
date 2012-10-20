@@ -56,7 +56,7 @@ private
         def perform_match(predicate, hash_predicate, actuals, expecteds)
           expecteds.send(predicate) do |expected|
             if comparing_doc_to_solr_resp_hash?(actuals, expected)
-              if (@before_expected)
+              if @before_expected
                 before_ix = actuals.get_first_doc_index(@before_expected)
                 if before_ix
                   @max_doc_position = before_ix + 1
@@ -82,10 +82,14 @@ private
         end
         
         def method_missing(method, *args, &block)
-          @collection_name = method
-          @args = args
-          @block = block
-          self
+          if (method =~ /documents?/ || method =~ /results?/)
+            @collection_name = method
+            @args = args
+            @block = block
+            self
+          else
+            super.method_missing
+          end
         end
         
         # @return [String] 'documents' or 'document' as indicated by expectation
