@@ -15,7 +15,7 @@ describe RSpecSolr do
       it "fails when include arg is String but doc comes too late" do
         lambda {
           @solr_resp_5_docs.should include("222").in_first(1)
-        }.should fail_matching('} to include document "222" in first 1')
+        }.should fail_matching('expected response to include document "222" in first 1')
       end
       it "passes when include arg is Hash and doc meets criteria" do
         @solr_resp_5_docs.should include("fld" => ["val1", "val2", "val3"]).in_first(4)
@@ -23,7 +23,7 @@ describe RSpecSolr do
       it "fails when include arg is Hash but doc comes too late" do
         lambda {
           @solr_resp_5_docs.should include("fld" => ["val1", "val2", "val3"]).in_first(2)
-        }.should fail_matching('} to include document {"fld"=>["val1", "val2", "val3"]} in first 2')
+        }.should fail_matching('expected response to include document {"fld"=>["val1", "val2", "val3"]} in first 2')
       end
       it "passes when include arg is Array and all docs meet criteria" do
         @solr_resp_5_docs.should include(["111", "222"]).in_first(2)
@@ -32,21 +32,21 @@ describe RSpecSolr do
       it "fails when include arg is Array but at least one doc comes too late" do
         lambda {
           @solr_resp_5_docs.should include(["111", "444"]).in_first(2)
-        }.should fail_matching('} to include documents ["111", "444"] in first 2')
+        }.should fail_matching('expected response to include documents ["111", "444"] in first 2')
         lambda {
           @solr_resp_5_docs.should include(["333", {"fld2"=>"val2"}]).in_first(2)
-        }.should fail_matching('} to include documents ["333", {"fld2"=>"val2"}] in first 2')
+        }.should fail_matching('expected response to include documents ["333", {"fld2"=>"val2"}] in first 2')
       end
       it "fails when there is no matching result" do
         lambda {        
           @solr_resp_5_docs.should include("666").in_first(6)
-        }.should fail_matching('} to include document "666" in first 6')
+        }.should fail_matching('expected response to include document "666" in first 6')
         lambda {
           @solr_resp_5_docs.should include("fld"=>"not there").in_first(3)
-        }.should fail_matching('} to include document {"fld"=>"not there"} in first 3')
+        }.should fail_matching('expected response to include document {"fld"=>"not there"} in first 3')
         lambda {
           @solr_resp_5_docs.should include("666", "777").in_first(6)
-        }.should fail_matching('} to include documents "666" and "777" in first 6')
+        }.should fail_matching('expected response to include documents "666" and "777" in first 6')
       end
     end # should include().in_first(n)
 
@@ -95,7 +95,7 @@ describe RSpecSolr do
       it "fails when matching document is not first" do
         lambda {
           @solr_resp_5_docs.should include("fld"=>["val1", "val2", "val3"]).in_first
-        }.should fail_matching('} to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
+        }.should fail_matching('expected response to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
       end
     end
     context "should_NOT include().in_first" do
@@ -120,7 +120,7 @@ describe RSpecSolr do
       it "fails when document(s) don't meet criteria" do
         lambda {
           @solr_resp_5_docs.should include("fld"=>["val1", "val2", "val3"]).in_first.result
-        }.should fail_matching('} to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
+        }.should fail_matching('expected response to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
       end
     end
     context "should_NOT #include().in_first(n).allowed_chained.names" do
@@ -153,15 +153,15 @@ describe RSpecSolr do
       it "fails when a document meets the criteria but is not the first" do
         lambda {
           @solr_resp_5_docs.should include("222").as_first
-        }.should fail_matching('} to include document "222" in first 1')
+        }.should fail_matching('expected response to include document "222" in first 1')
         lambda {
           @solr_resp_5_docs.should include("fld" => ["val1", "val2", "val3"]).as_first
-          }.should fail_matching('} to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
+          }.should fail_matching('expected response to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
       end
       it "fails when there is no matching result" do
         lambda {
           @solr_resp_5_docs.should include("96").as_first
-          }.should fail_matching('} to include document "96" in first 1')
+          }.should fail_matching('expected response to include document "96" in first 1')
       end    
     end
     context "should_NOT include().as_first" do
@@ -197,7 +197,7 @@ describe RSpecSolr do
       it "fails when document(s) don't meet criteria" do
         lambda {
           @solr_resp_5_docs.should include("fld"=>["val1", "val2", "val3"]).as_first.result
-        }.should fail_matching ('} to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
+        }.should fail_matching ('expected response to include document {"fld"=>["val1", "val2", "val3"]} in first 1')
       end
     end
     context "should_NOT #include().as_first(n).any_chained.names" do

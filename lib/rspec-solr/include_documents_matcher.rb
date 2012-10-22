@@ -37,11 +37,11 @@ module RSpec
           assert_ivars :@actual, :@expected
 # FIXME: DRY up these messages across cases and across should and should_not
           if @before_expected
-            "expected #{@actual.inspect} to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}"
+            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
           elsif @min_for_last_matching_doc_pos
             "expected each of the first #{@min_for_last_matching_doc_pos.to_s} documents to #{name_to_sentence}#{expected_to_sentence} in response: #{@actual.inspect}"
           elsif @max_doc_position
-            "expected #{@actual.inspect} to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results"
+            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results: #{@actual.inspect}"
           else
             super
           end
@@ -51,11 +51,11 @@ module RSpec
         def failure_message_for_should_not
           assert_ivars :@actual, :@expected
           if @before_expected
-            "expected #{@actual.inspect} not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}"
+            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
           elsif @min_for_last_matching_doc_pos
             "expected some of the first #{@min_for_last_matching_doc_pos.to_s} documents not to #{name_to_sentence}#{expected_to_sentence} in response: #{@actual.inspect}"
           elsif @max_doc_position
-            "expected #{@actual.inspect} not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results"
+            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results: #{@actual.inspect}"
           else
             super
           end

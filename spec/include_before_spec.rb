@@ -20,28 +20,28 @@ describe RSpecSolr do
     it "fails when docs aren't in expected order" do
       lambda {
         @solr_resp_5_docs.should include("222").before("fld2"=>"val2")
-      }.should fail_matching('} to include document "222" before document matching {"fld2"=>"val2"}')
+      }.should fail_matching('expected response to include document "222" before document matching {"fld2"=>"val2"}')
       lambda {
         @solr_resp_5_docs.should include("111", "444").before([{"id"=>"333"}, {"id"=>"555"}])
-      }.should fail_matching('} to include documents "111" and "444" before documents matching [{"id"=>"333"}, {"id"=>"555"}]')
+      }.should fail_matching('expected response to include documents "111" and "444" before documents matching [{"id"=>"333"}, {"id"=>"555"}]')
       lambda {
         @solr_resp_5_docs.should include([{"id"=>"222"}, {"id"=>"444"}]).before([{"id"=>"333"}, {"id"=>"555"}])
-      }.should fail_matching('} to include documents [{"id"=>"222"}, {"id"=>"444"}] before documents matching [{"id"=>"333"}, {"id"=>"555"}]')
+      }.should fail_matching('expected response to include documents [{"id"=>"222"}, {"id"=>"444"}] before documents matching [{"id"=>"333"}, {"id"=>"555"}]')
     end
     it "fails when it can't find a doc matching first argument(s)" do
       lambda {
         @solr_resp_5_docs.should include("not_there").before("555")
-      }.should fail_matching('} to include document "not_there" before document matching "555"')
+      }.should fail_matching('expected response to include document "not_there" before document matching "555"')
     end
     it "fails when it can't find a doc matching second argument(s)" do
       lambda {
         @solr_resp_5_docs.should include("222").before("not_there")
-      }.should fail_matching('} to include document "222" before document matching "not_there"')
+      }.should fail_matching('expected response to include document "222" before document matching "not_there"')
     end
     it "fails when it can't find docs matching first or second argument(s)" do
       lambda {
         @solr_resp_5_docs.should include("not_there").before("still_not_there")
-      }.should fail_matching('} to include document "not_there" before document matching "still_not_there"')
+      }.should fail_matching('expected response to include document "not_there" before document matching "still_not_there"')
     end
     
   end # should include().before()
