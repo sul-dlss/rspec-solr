@@ -364,6 +364,7 @@ describe RSpecSolr do
         it "passes if Solr document in response matches regex in named field" do
           @solr_resp_5_docs.should include("id" => /\d{3}/)
           @solr_resp_5_docs.should include("fld" => /^va/)  # 2 docs match 
+          @solr_resp_5_docs.should include("fld" => /Va/i)  # 2 docs match 
         end
         it "passes if single value expectation is expressed as an Array" do
           @solr_resp_5_docs.should include("id" => [/111/])

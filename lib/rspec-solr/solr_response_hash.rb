@@ -41,9 +41,8 @@ class RSpecSolr
     def has_document?(expected_doc, max_doc_position = nil, all_must_match = nil)
       if expected_doc.is_a?(Hash)
         if all_must_match
-          first_non_match = docs.find_index { |doc| 
-            !doc_matches_all_criteria(doc, expected_doc)
-          } >= max_doc_position
+          first_non_match = docs.find_index { |doc| !doc_matches_all_criteria(doc, expected_doc) }
+          (first_non_match ? first_non_match >= max_doc_position : true)
         else
           # we are happy if any doc meets all of our expectations
           docs.any? { |doc| 
@@ -75,7 +74,7 @@ class RSpecSolr
             # a doc's fld values can be a String or an Array
             case exp_val
               when Regexp
-                Array(doc[exp_fname]).any? { |val| val =~ exp_val }
+                return true if Array(doc[exp_fname]).any? { |val| val =~ exp_val }
               else
                 Array(doc[exp_fname]).include?(exp_val)
             end

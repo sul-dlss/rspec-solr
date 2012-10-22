@@ -12,6 +12,11 @@ describe RSpecSolr do
         @solr_resp.should include("fld" => "val").in_each_of_first(2).documents
         @solr_resp.should include("fld" => "val").in_each_of_first(2).results
       end
+      it "passes when all docs in range meet regex criteria" do
+        @solr_resp.should include("fld" => /val/).in_each_of_first(2)
+        @solr_resp.should include("fld" => /al/).in_each_of_first(2)
+        @solr_resp.should include("fld" => /Val/i).in_each_of_first(2)
+      end
       it "fails when doc in range doesn't meet criteria" do
         lambda {
           @solr_resp.should include("fld2" => "val2").in_each_of_first(2)
@@ -19,6 +24,14 @@ describe RSpecSolr do
         lambda {
           @solr_resp.should include("fld" => "val").in_each_of_first(3)
         }.should fail_matching('expected each of the first 3 documents to include {"fld"=>"val"}')
+      end
+      it "fails when doc in range doesn't meet regex criteria" do
+        lambda {
+          @solr_resp.should include("fld2" => /l2/).in_each_of_first(2)
+        }.should fail_matching('expected each of the first 2 documents to include {"fld2"=>/l2/}')
+        lambda {
+          @solr_resp.should include("fld" => /al/).in_each_of_first(3)
+        }.should fail_matching('expected each of the first 3 documents to include {"fld"=>/al/}')
       end
     end
     context "should_NOT" do
@@ -33,9 +46,24 @@ describe RSpecSolr do
           @solr_resp.should_not include("fld" => "val").in_each_of_first(2).results
         }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>"val"}')
       end
+      it "fails when all docs in range meet regex criteria" do
+        lambda {
+          @solr_resp.should_not include("fld" => /val/).in_each_of_first(2)
+        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>/val/}')
+        lambda {
+          @solr_resp.should_not include("fld" => /al/).in_each_of_first(2)
+        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>/al/}')
+        lambda {
+          @solr_resp.should_not include("fld" => /Val/i).in_each_of_first(2)
+        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>/Val/i}')
+      end
       it "passes when doc in range doesn't meet criteria" do
         @solr_resp.should_not include("fld" => "val").in_each_of_first(3)
         @solr_resp.should_not include("fld2" => "val2").in_each_of_first(2)
+      end
+      it "passes when doc in range doesn't meet regex criteria" do
+        @solr_resp.should_not include("fld2" => /l2/).in_each_of_first(2)
+        @solr_resp.should_not include("fld" => /al/).in_each_of_first(3)
       end
     end
     it "should expect a Hash for the include" do
