@@ -133,6 +133,15 @@ class RSpecSolr
         (self['response'] ? "'response' => {'numFound' => #{self['response']['numFound']}, ...}" : "" ) + 
         " ... }"
     end
+    
+    # @return true if the Solr response contains the facet field indicated and the facet field has some values; return false otherwise
+    def has_facet_field?(ff_name)
+      if self["facet_counts"] && self["facet_counts"]["facet_fields"] && self["facet_counts"]["facet_fields"][ff_name]
+        self["facet_counts"]["facet_fields"][ff_name].size > 0
+      else
+        false
+      end
+    end
 
 private
     
