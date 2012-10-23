@@ -74,7 +74,7 @@ class RSpecSolr
             # a doc's fld values can be a String or an Array
             case exp_val
               when Regexp
-                return true if Array(doc[exp_fname]).any? { |val| val =~ exp_val }
+                Array(doc[exp_fname]).any? { |val| val =~ exp_val }
               else
                 Array(doc[exp_fname]).include?(exp_val)
             end
@@ -135,9 +135,23 @@ class RSpecSolr
     end
     
     # @return true if the Solr response contains the facet field indicated and the facet field has some values; return false otherwise
+    def has_facet_field_with_value?(ff_name, facet_val = nil)
+      if self["facet_counts"] && self["facet_counts"]["facet_fields"] && self["facet_counts"]["facet_fields"][ff_name]
+        if facet_val
+          val_count_array = self["facet_counts"]["facet_fields"][ff_name]
+          return val_count_array.each_slice(2).find { |val_count| val_count[0] == facet_val}
+        else
+          self["facet_counts"]["facet_fields"][ff_name].size > 0
+        end
+      else
+        false
+      end
+    end
+
+    # @return true if the Solr response contains the facet field indicated and the facet field has some values; return false otherwise
     def has_facet_field?(ff_name)
       if self["facet_counts"] && self["facet_counts"]["facet_fields"] && self["facet_counts"]["facet_fields"][ff_name]
-        self["facet_counts"]["facet_fields"][ff_name].size > 0
+        self["facet_counts"]["facet_fields"][ff_name]
       else
         false
       end
