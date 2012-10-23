@@ -50,7 +50,8 @@
 * ("fldname" => ["val1", /val2_regex/, "val3"])
  NOTE: all of the Array values must be present for the fld in a single Solr document
        should_not for Array implies NONE of the values should be present in a single document
-TODO:
+
+More Ideas (TODO):
 * include_title("val") (i.e. include_anyFieldName("val") )
 
 ==== Specifying Multiple Documents
@@ -144,22 +145,25 @@ TODO: Potential Syntax:
 * rspec-solr_resp_hash1.size.should == rspec-solr_resp_hash2.size
 * rspec-solr_resp_hash1.size.should be_within(delta).of(rspec-solr_resp_hash2.size)
 
-== TODO: MATCHING FACET VALUES IN RESPONSE
+== MATCHING FACET VALUES IN RESPONSE
 
- NOTE:  this is about the facet values returned in THIS response
-
-=== Specifying Facet Values
-* facet(:format => "Book")
-* facets(:format => ["Image", "Map"])
-*  facets with arrarr and without
-
-=== Potential Syntax
-rspec-solr_resp_hash.should include_facet
+ NOTE:  this is about the facet counts returned in THIS response
 
 === Matchers
-* include_facet().before_facet()
-* include_facets().before_facet()
-* include_facet().before_facets()
-* include_facets().before_facets()
+* have_facet_field()
+* have_facet_field().with_value()
 
+=== Usage
+* rspec-solr_resp_hash.should have_facet_field("author")
+* rspec-solr_resp_hash.should have_facet_field("author").with_value("Steinbeck, John")
 
+=== TODO:
+* facets with arrarr and without (Solr option to get better facet formatting)
+* have_facet_field().with_value().with_count()
+* more ideas
+** facet(:format => "Book")
+** facets(:format => ["Image", "Map"])
+** include_facet().before_facet()
+** include_facets().before_facet()
+** include_facet().before_facets()
+** include_facets().before_facets()
