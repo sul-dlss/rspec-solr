@@ -149,6 +149,7 @@ Please share yours!
 5. Create new Pull Request
 
 == Releases
+- <b>1.0.0</b> declare victory and make 0.2.0 into 1.0.0
 - <b>0.2.0</b> add facet support  have_facet_field(fld_name).with_value(fld_value)
 - <b>0.1.4</b> fix regex match to work with in_each_of_first(n)
 - <b>0.1.3</b> added include().in_each_of_first(n)
