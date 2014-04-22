@@ -155,9 +155,9 @@ describe RSpecSolr do
       my_matcher.failure_message_for_should_not.should eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
-  should_not have_at_least(6).documents
+  expect(actual).not_to have_at_least(6).documents
 We recommend that you use this instead:
-  should have_at_most(5).documents
+  expect(actual).to have_at_most(5).documents
 EOF
     end
   end
@@ -192,9 +192,9 @@ EOF
       my_matcher.failure_message_for_should_not.should eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
-  should_not have_at_most(4).documents
+  expect(actual).not_to have_at_most(4).documents
 We recommend that you use this instead:
-  should have_at_least(5).documents
+  expect(actual).to have_at_least(5).documents
 EOF
     end
   end
