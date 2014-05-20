@@ -26,10 +26,10 @@ Gem::Specification.new do |gem|
   # docs
   gem.add_development_dependency "rdoc"
   gem.add_development_dependency "yard"
-  # test coverage for this gem
-	gem.add_development_dependency 'simplecov'
-	gem.add_development_dependency 'simplecov-rcov'
+  # test coverage for this gem now via Coveralls on travis
+#	gem.add_development_dependency 'simplecov'
+#	gem.add_development_dependency 'simplecov-rcov'
 	# continuous integration 
-	gem.add_development_dependency 'travis-lint'
+#	gem.add_development_dependency 'travis-lint'
   
 end
