@@ -1,8 +1,6 @@
 language: ruby
-script: rake rspec
 rvm:
-  - 2.1.0
-  - 2.0.0
+  - 2.2.2
   - 1.9.3
   - jruby-19mode
 notifications:
