@@ -1,4 +1,6 @@
 # for test coverage
+
+require 'rspec-solr'
 require 'simplecov'
 require 'simplecov-rcov'
 class SimpleCov::Formatter::MergedFormatter
