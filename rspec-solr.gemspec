@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_path = ["lib"]
   
   gem.add_runtime_dependency "rspec"
+  gem.add_runtime_dependency "rspec-collection_matchers"
 
   # Development dependencies
   # Bundler will install these gems too if you've checked out rspec-solr source from git and run 'bundle install'

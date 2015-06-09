@@ -30,11 +30,11 @@ module RSpecSolr::Matchers
         actual_solr_resp_hash.size == expected_solr_resp_hash.size
       end
 
-      failure_message_for_should do |actual_solr_resp_hash|
+      failure_message do |actual_solr_resp_hash|
         "expected #{actual_solr_resp_hash.size} documents in Solr response #{expected_solr_resp_hash.num_docs_partial_output_str}"
       end
     
-      failure_message_for_should_not do |actual_solr_resp_hash|
+      failure_message_when_negated do |actual_solr_resp_hash|
         "expected (not #{actual_solr_resp_hash.size}) documents in Solr response #{expected_solr_resp_hash.num_docs_partial_output_str}"
       end 
       
@@ -58,11 +58,11 @@ module RSpecSolr::Matchers
         actual_solr_resp_hash.size < expected_solr_resp_hash.size
       end
 
-      failure_message_for_should do |actual_solr_resp_hash|
+      failure_message do |actual_solr_resp_hash|
         "expected more than #{actual_solr_resp_hash.size} documents in Solr response #{expected_solr_resp_hash.num_docs_partial_output_str}"
       end
 
-      failure_message_for_should_not do |actual_solr_resp_hash|
+      failure_message_when_negated do |actual_solr_resp_hash|
         "expected #{actual_solr_resp_hash.size} or fewer documents in Solr response #{expected_solr_resp_hash.num_docs_partial_output_str}"
       end 
 
@@ -86,11 +86,11 @@ module RSpecSolr::Matchers
         actual_solr_resp_hash.size > expected_solr_resp_hash.size
       end
 
-      failure_message_for_should do |actual_solr_resp_hash|
+      failure_message do |actual_solr_resp_hash|
         "expected fewer than #{actual_solr_resp_hash.size} documents in Solr response #{expected_solr_resp_hash.num_docs_partial_output_str}"
       end
 
-      failure_message_for_should_not do |actual_solr_resp_hash|
+      failure_message_when_negated do |actual_solr_resp_hash|
         "expected #{actual_solr_resp_hash.size} or more documents in Solr response #{expected_solr_resp_hash.num_docs_partial_output_str}"
       end 
 
