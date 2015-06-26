@@ -7,5 +7,5 @@ require 'rspec/collection_matchers'
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-RSpec.configure do |config|
+RSpec.configure do |_config|
 end
