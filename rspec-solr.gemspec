@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.require_path = ["lib"]
   
-  gem.add_runtime_dependency "rspec"
+  gem.add_runtime_dependency "rspec", "~> 3.0"
   gem.add_runtime_dependency "rspec-collection_matchers"
 
   # Development dependencies
@@ -29,7 +29,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "yard"
   # test coverage for this gem
 	gem.add_development_dependency 'simplecov'
-	gem.add_development_dependency 'simplecov-rcov'
 	# continuous integration 
 	gem.add_development_dependency 'travis-lint'
   
