@@ -5,23 +5,23 @@ describe RSpecSolr do
 
   context "shouldn't break RSpec #have matcher" do
     it "for Array" do
-      [1,2,3].should have(3).items
-      [1,2,3].should_not have(4).items
-      [1,2,3].should have_at_least(2).items
-      [1,2,3].should have_at_least(1).item
-      [1,2,3].should have_at_most(5).items
+      expect([1,2,3]).to have(3).items
+      expect([1,2,3]).not_to have(4).items
+      expect([1,2,3]).to have_at_least(2).items
+      expect([1,2,3]).to have_at_least(1).item
+      expect([1,2,3]).to have_at_most(5).items
     end
     
     it "for Hash" do
-      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_exactly(3).items
-      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should_not have(4).items
-      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_at_least(2).items
-      {:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}.should have_at_most(5).items
+      expect({:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}).to have_exactly(3).items
+      expect({:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}).not_to have(4).items
+      expect({:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}).to have_at_least(2).items
+      expect({:k1 => 'v1', :k2 => 'v2', :k3 => 'v3'}).to have_at_most(5).items
     end
     
     it "for String" do
-      "this string".should have(11).characters
-      "this string".should_not have(12).characters
+      expect("this string").to have(11).characters
+      expect("this string").not_to have(12).characters
     end
     
     it "passes args to target" do
@@ -42,37 +42,37 @@ describe RSpecSolr do
   context "should have(n).documents" do
     
     it "pluralizes 'documents'" do
-      @solr_resp_1_doc.should have(1).document
+      expect(@solr_resp_1_doc).to have(1).document
     end
     
     it "passes if target response has n documents" do
-      @solr_resp_5_docs.should have(5).documents
-      @solr_resp_no_docs.should have(0).documents
+      expect(@solr_resp_5_docs).to have(5).documents
+      expect(@solr_resp_no_docs).to have(0).documents
     end
     
     it "converts :no to 0" do
-      @solr_resp_no_docs.should have(:no).documents
+      expect(@solr_resp_no_docs).to have(:no).documents
     end
     
     it "converts a String argument to Integer" do
-      @solr_resp_5_docs.should have('5').documents
+      expect(@solr_resp_5_docs).to have('5').documents
     end
     
     it "fails if target response has < n documents" do
       expect {
-        @solr_resp_5_docs.should have(6).documents
+        expect(@solr_resp_5_docs).to have(6).documents
       }.to raise_error.with_message "expected 6 documents, got 5"
       expect {
-        @solr_resp_no_docs.should have(1).document
+        expect(@solr_resp_no_docs).to have(1).document
       }.to raise_error.with_message "expected 1 document, got 0"
     end
     
     it "fails if target response has > n documents" do
       expect {
-        @solr_resp_5_docs.should have(4).documents
+        expect(@solr_resp_5_docs).to have(4).documents
       }.to raise_error.with_message "expected 4 documents, got 5"
       expect {
-        @solr_resp_1_doc.should have(0).documents
+        expect(@solr_resp_1_doc).to have(0).documents
       }.to raise_error.with_message "expected 0 documents, got 1"
     end
     
@@ -80,69 +80,69 @@ describe RSpecSolr do
   
   context "should_not have(n).documents" do
     it "passes if target response has < n documents" do
-      @solr_resp_5_docs.should_not have(6).documents
-      @solr_resp_1_doc.should_not have(2).documents
-      @solr_resp_no_docs.should_not have(1).document
+      expect(@solr_resp_5_docs).not_to have(6).documents
+      expect(@solr_resp_1_doc).not_to have(2).documents
+      expect(@solr_resp_no_docs).not_to have(1).document
     end
     
     it "passes if target response has > n documents" do
-      @solr_resp_5_docs.should_not have(4).documents
-      @solr_resp_1_doc.should_not have(0).documents
-      @solr_resp_no_docs.should_not have(-1).documents
+      expect(@solr_resp_5_docs).not_to have(4).documents
+      expect(@solr_resp_1_doc).not_to have(0).documents
+      expect(@solr_resp_no_docs).not_to have(-1).documents
     end
     
     it "fails if target response has n documents" do
       expect {
-        @solr_resp_5_docs.should_not have(5).documents
+        expect(@solr_resp_5_docs).not_to have(5).documents
       }.to raise_error.with_message "expected target not to have 5 documents, got 5"
     end
   end
   
   context "should have_exactly(n).documents" do
     it "passes if target response has n documents" do
-      @solr_resp_5_docs.should have_exactly(5).documents
-      @solr_resp_no_docs.should have_exactly(0).documents
+      expect(@solr_resp_5_docs).to have_exactly(5).documents
+      expect(@solr_resp_no_docs).to have_exactly(0).documents
     end
     it "converts :no to 0" do
-      @solr_resp_no_docs.should have_exactly(:no).documents
+      expect(@solr_resp_no_docs).to have_exactly(:no).documents
     end
     it "fails if target response has < n documents" do
       expect {
-        @solr_resp_5_docs.should have_exactly(6).documents
+        expect(@solr_resp_5_docs).to have_exactly(6).documents
       }.to raise_error.with_message "expected 6 documents, got 5"
       expect {
-        @solr_resp_no_docs.should have_exactly(1).document
+        expect(@solr_resp_no_docs).to have_exactly(1).document
       }.to raise_error.with_message "expected 1 document, got 0"
     end
     
     it "fails if target response has > n documents" do
       expect {
-        @solr_resp_5_docs.should have_exactly(4).documents
+        expect(@solr_resp_5_docs).to have_exactly(4).documents
       }.to raise_error.with_message "expected 4 documents, got 5"
       expect {
-        @solr_resp_1_doc.should have_exactly(0).documents
+        expect(@solr_resp_1_doc).to have_exactly(0).documents
       }.to raise_error.with_message "expected 0 documents, got 1"
     end
   end
   
   context "should have_at_least(n).documents" do
     it "passes if target response has n documents" do
-      @solr_resp_5_docs.should have_at_least(5).documents
-      @solr_resp_1_doc.should have_at_least(1).document
-      @solr_resp_no_docs.should have_at_least(0).documents
+      expect(@solr_resp_5_docs).to have_at_least(5).documents
+      expect(@solr_resp_1_doc).to have_at_least(1).document
+      expect(@solr_resp_no_docs).to have_at_least(0).documents
     end
     
     it "passes if target response has > n documents" do
-      @solr_resp_5_docs.should have_at_least(4).documents
-      @solr_resp_1_doc.should have_at_least(0).documents
+      expect(@solr_resp_5_docs).to have_at_least(4).documents
+      expect(@solr_resp_1_doc).to have_at_least(0).documents
     end
     
     it "fails if target response has < n documents" do
       expect {
-        @solr_resp_5_docs.should have_at_least(6).documents
+        expect(@solr_resp_5_docs).to have_at_least(6).documents
       }.to raise_error.with_message "expected at least 6 documents, got 5"
       expect {
-        @solr_resp_no_docs.should have_at_least(1).document
+        expect(@solr_resp_no_docs).to have_at_least(1).document
       }.to raise_error.with_message "expected at least 1 document, got 0"
     end
     
@@ -152,7 +152,7 @@ describe RSpecSolr do
       # when
       my_matcher.matches?(@solr_resp_5_docs)
       # then 
-      my_matcher.failure_message_for_should_not.should eq <<-EOF
+      expect(my_matcher.failure_message_for_should_not).to eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_least(6).documents
@@ -164,22 +164,22 @@ EOF
     
   context "should have_at_most(n).documents" do
     it "passes if target response has n documents" do
-      @solr_resp_5_docs.should have_at_most(5).documents
-      @solr_resp_1_doc.should have_at_most(1).document
-      @solr_resp_no_docs.should have_at_most(0).documents
+      expect(@solr_resp_5_docs).to have_at_most(5).documents
+      expect(@solr_resp_1_doc).to have_at_most(1).document
+      expect(@solr_resp_no_docs).to have_at_most(0).documents
     end
 
     it "passes if target response has < n documents" do
-      @solr_resp_5_docs.should have_at_most(6).documents
-      @solr_resp_no_docs.should have_at_most(1).document
+      expect(@solr_resp_5_docs).to have_at_most(6).documents
+      expect(@solr_resp_no_docs).to have_at_most(1).document
     end
 
     it "fails if target response has > n documents" do
       expect {
-        @solr_resp_5_docs.should have_at_most(4).documents
+        expect(@solr_resp_5_docs).to have_at_most(4).documents
       }.to raise_error.with_message "expected at most 4 documents, got 5"
       expect {
-        @solr_resp_1_doc.should have_at_most(0).documents
+        expect(@solr_resp_1_doc).to have_at_most(0).documents
       }.to raise_error.with_message "expected at most 0 documents, got 1"
     end
 
@@ -189,7 +189,7 @@ EOF
       # when
       my_matcher.matches?(@solr_resp_5_docs)
       # then 
-      my_matcher.failure_message_for_should_not.should eq <<-EOF
+      expect(my_matcher.failure_message_for_should_not).to eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_most(4).documents
@@ -207,15 +207,15 @@ EOF
                             "docs" => [ {"id"=>"111"} ]
                           }
                         })
-    solr_resp.should have(3).documents
-    solr_resp.should_not have(1).document
+    expect(solr_resp).to have(3).documents
+    expect(solr_resp).not_to have(1).document
     solr_resp = RSpecSolr::SolrResponseHash.new({ "response" =>
                           { "numFound" => 3, 
                             "start" => 0, 
                             "rows" => 0 
                           }
                         })
-    solr_resp.should have(3).documents
+    expect(solr_resp).to have(3).documents
   end
   
   before(:all) do

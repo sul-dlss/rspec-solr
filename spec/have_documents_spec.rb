@@ -7,24 +7,24 @@ describe RSpecSolr do
 
   context "have_documents with no doc matcher" do
     it "passes if response.should has documents" do
-      @solr_resp_w_docs.should have_documents
-      @solr_resp_total_but_no_docs.should have_documents
+      expect(@solr_resp_w_docs).to have_documents
+      expect(@solr_resp_total_but_no_docs).to have_documents
     end
 
     it "passes if response.should_not has no documents" do
-      @solr_resp_no_docs.should_not have_documents
+      expect(@solr_resp_no_docs).not_to have_documents
     end
 
     it "failure message for should" do
       expect {
-        @solr_resp_no_docs.should have_documents
+        expect(@solr_resp_no_docs).to have_documents
       }.to raise_error.with_message a_string_including "expected documents in Solr response "
     end
 
     it "failure message for should_not" do
       expect {
-        @solr_resp_w_docs.should_not have_documents
-        @solr_resp_total_but_no_docs.should_not have_documents
+        expect(@solr_resp_w_docs).not_to have_documents
+        expect(@solr_resp_total_but_no_docs).not_to have_documents
       }.to raise_error.with_message a_string_including "did not expect documents, but Solr response had "
     end    
   end
