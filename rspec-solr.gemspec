@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.summary       = "RSpec custom matchers for Solr response objects"
   gem.homepage      = "http://github.com/sul-dlss/rspec-solr"
 
-  gem.extra_rdoc_files = ["LICENSE.txt", "README.rdoc", "MATCHERS.rdoc"]
+  gem.extra_rdoc_files = ["LICENSE.txt", "README.md", "MATCHERS.md"]
   gem.files         = `git ls-files`.split($\)
   gem.test_files    = gem.files.grep(%r{^spec/})
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
