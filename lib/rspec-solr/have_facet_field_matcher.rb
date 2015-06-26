@@ -12,7 +12,7 @@ module RSpecSolr::Matchers
   def self.have_facet_field_body 
     lambda { |expected_facet_field_name|
       
-      match_for_should do |solr_resp|
+      match do |solr_resp|
         if @facet_val
           solr_resp.has_facet_field_with_value?(expected_facet_field_name, @facet_val)
         else
@@ -20,7 +20,7 @@ module RSpecSolr::Matchers
         end
       end
       
-      match_for_should_not do |solr_resp|
+      match_when_negated do |solr_resp|
         # we should fail if we are looking for a specific facet value but the facet field isn't present in the response
         @has_field = solr_resp.has_facet_field?(expected_facet_field_name)
         if @facet_val
@@ -34,7 +34,7 @@ module RSpecSolr::Matchers
         end
       end
 
-      failure_message_for_should do |solr_resp|
+      failure_message do |solr_resp|
         if @facet_val
           "expected facet field #{expected_facet_field_name} with value #{@facet_val} in Solr response: #{solr_resp}"
         else
@@ -42,7 +42,7 @@ module RSpecSolr::Matchers
         end
       end
     
-      failure_message_for_should_not do |solr_resp|
+      failure_message_when_negated do |solr_resp|
         if @facet_val
           if @has_field
             "expected facet field #{expected_facet_field_name} not to have value #{@facet_val} in Solr response: #{solr_resp}"

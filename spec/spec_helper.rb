@@ -3,6 +3,7 @@
 require 'rspec-solr'
 require 'simplecov'
 require 'simplecov-rcov'
+require 'rspec/collection_matchers'
 class SimpleCov::Formatter::MergedFormatter
   def format(result)
      SimpleCov::Formatter::HTMLFormatter.new.format(result)
@@ -18,7 +19,8 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 
-Dir['./spec/support/**/*'].each {|f| require f}
-
-#RSpec.configure do |config|
-#end
+RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+end

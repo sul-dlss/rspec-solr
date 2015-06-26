@@ -18,44 +18,44 @@ describe RSpecSolr do
         @solr_resp.should include("fld" => /Val/i).in_each_of_first(2)
       end
       it "fails when doc in range doesn't meet criteria" do
-        lambda {
+        expect {
           @solr_resp.should include("fld2" => "val2").in_each_of_first(2)
-        }.should fail_matching('expected each of the first 2 documents to include {"fld2"=>"val2"}')
-        lambda {
+        }.to raise_error.with_message a_string_including 'expected each of the first 2 documents to include {"fld2"=>"val2"}'
+        expect {
           @solr_resp.should include("fld" => "val").in_each_of_first(3)
-        }.should fail_matching('expected each of the first 3 documents to include {"fld"=>"val"}')
+        }.to raise_error.with_message a_string_including 'expected each of the first 3 documents to include {"fld"=>"val"}'
       end
       it "fails when doc in range doesn't meet regex criteria" do
-        lambda {
+        expect {
           @solr_resp.should include("fld2" => /l2/).in_each_of_first(2)
-        }.should fail_matching('expected each of the first 2 documents to include {"fld2"=>/l2/}')
-        lambda {
+        }.to raise_error.with_message a_string_including 'expected each of the first 2 documents to include {"fld2"=>/l2/}'
+        expect {
           @solr_resp.should include("fld" => /al/).in_each_of_first(3)
-        }.should fail_matching('expected each of the first 3 documents to include {"fld"=>/al/}')
+        }.to raise_error.with_message a_string_including 'expected each of the first 3 documents to include {"fld"=>/al/}'
       end
     end
     context "should_NOT" do
       it "fails when all docs in range meet criteria" do
-        lambda {
+        expect {
           @solr_resp.should_not include("fld" => "val").in_each_of_first(2)
-        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>"val"}')
-        lambda {
+        }.to raise_error.with_message a_string_including 'expected some of the first 2 documents not to include {"fld"=>"val"}'
+        expect {
           @solr_resp.should_not include("fld" => "val").in_each_of_first(2).documents
-        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>"val"}')
-        lambda {
+        }.to raise_error.with_message a_string_including 'expected some of the first 2 documents not to include {"fld"=>"val"}'
+        expect {
           @solr_resp.should_not include("fld" => "val").in_each_of_first(2).results
-        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>"val"}')
+        }.to raise_error.with_message a_string_including 'expected some of the first 2 documents not to include {"fld"=>"val"}'
       end
       it "fails when all docs in range meet regex criteria" do
-        lambda {
+        expect {
           @solr_resp.should_not include("fld" => /val/).in_each_of_first(2)
-        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>/val/}')
-        lambda {
+        }.to raise_error.with_message a_string_including 'expected some of the first 2 documents not to include {"fld"=>/val/}'
+        expect {
           @solr_resp.should_not include("fld" => /al/).in_each_of_first(2)
-        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>/al/}')
-        lambda {
+        }.to raise_error.with_message a_string_including 'expected some of the first 2 documents not to include {"fld"=>/al/}'
+        expect {
           @solr_resp.should_not include("fld" => /Val/i).in_each_of_first(2)
-        }.should fail_matching('expected some of the first 2 documents not to include {"fld"=>/Val/i}')
+        }.to raise_error.with_message a_string_including 'expected some of the first 2 documents not to include {"fld"=>/Val/i}'
       end
       it "passes when doc in range doesn't meet criteria" do
         @solr_resp.should_not include("fld" => "val").in_each_of_first(3)
@@ -78,10 +78,10 @@ describe RSpecSolr do
       }.to raise_error(ArgumentError, "in_each_of_first(n) requires a Hash argument to include() method")
       expect {
         @solr_resp.should include("fld" => "val").in_each_of_first(1)
-      }.to_not raise_error(ArgumentError)
+      }.to_not raise_error
       expect {
         @solr_resp.should include({"fld" => "val", "fld2" => "val2"}).in_each_of_first(1)
-      }.to_not raise_error(ArgumentError)
+      }.to_not raise_error
     end
   end
     

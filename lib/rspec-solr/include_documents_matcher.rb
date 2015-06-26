@@ -33,29 +33,31 @@ module RSpec
         end    
 
         # override failure message for improved readability
-        def failure_message_for_should
+        def failure_message
           assert_ivars :@actual, :@expected
+          name_to_sentence = 'include'
 # FIXME: DRY up these messages across cases and across should and should_not
           if @before_expected
-            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
+            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
           elsif @min_for_last_matching_doc_pos
-            "expected each of the first #{@min_for_last_matching_doc_pos.to_s} documents to #{name_to_sentence}#{expected_to_sentence} in response: #{@actual.inspect}"
+            "expected each of the first #{@min_for_last_matching_doc_pos.to_s} documents to #{name_to_sentence}#{to_sentence(@expected)} in response: #{@actual.inspect}"
           elsif @max_doc_position
-            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results: #{@actual.inspect}"
+            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} in first #{@max_doc_position.to_s} results: #{@actual.inspect}"
           else
             super
           end
         end
         
         # override failure message for improved readability
-        def failure_message_for_should_not
+        def failure_message_when_negated
           assert_ivars :@actual, :@expected
+          name_to_sentence = 'include'
           if @before_expected
-            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
+            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
           elsif @min_for_last_matching_doc_pos
-            "expected some of the first #{@min_for_last_matching_doc_pos.to_s} documents not to #{name_to_sentence}#{expected_to_sentence} in response: #{@actual.inspect}"
+            "expected some of the first #{@min_for_last_matching_doc_pos.to_s} documents not to #{name_to_sentence}#{to_sentence(@expected)} in response: #{@actual.inspect}"
           elsif @max_doc_position
-            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{expected_to_sentence} in first #{@max_doc_position.to_s} results: #{@actual.inspect}"
+            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} in first #{@max_doc_position.to_s} results: #{@actual.inspect}"
           else
             super
           end
@@ -65,11 +67,14 @@ module RSpec
 private        
         # overriding method so we can use RSpec include matcher for document in Solr response
         #   my_solr_resp_hash.should include({"id" => "666"})
-        def perform_match(predicate, hash_predicate, actuals, expecteds)
-          expecteds.send(predicate) do |expected|
-            if comparing_doc_to_solr_resp_hash?(actuals, expected)
+
+        def excluded_from_actual
+          return [] unless @actual.respond_to?(:include?)
+
+          expected.inject([]) do |memo, expected_item|
+            if comparing_doc_to_solr_resp_hash?(expected_item)
               if @before_expected
-                before_ix = actuals.get_first_doc_index(@before_expected)
+                before_ix = actual.get_first_doc_index(@before_expected)
                 if before_ix
                   @max_doc_position = before_ix + 1
                 else
@@ -78,23 +83,26 @@ private
                 end
               end
               if @min_for_last_matching_doc_pos 
-                actuals.has_document?(expected, @min_for_last_matching_doc_pos, true)
+                memo << expected_item unless yield actual.has_document?(expected_item, @min_for_last_matching_doc_pos, true)
               else
-                actuals.has_document?(expected, @max_doc_position)
+                memo << expected_item unless yield actual.has_document?(expected_item, @max_doc_position)
               end
-            elsif comparing_hash_values?(actuals, expected)
-              expected.send(hash_predicate) {|k,v| actuals[k] == v}
-            elsif comparing_hash_keys?(actuals, expected)
-              actuals.has_key?(expected)
+            elsif comparing_hash_to_a_subset?(expected_item)
+              expected_item.each do |(key, value)|
+                memo << { key => value } unless yield actual_hash_includes?(key, value)
+              end
+            elsif comparing_hash_keys?(expected_item)
+              memo << expected_item unless yield actual_hash_has_key?(expected_item)
             else
-              actuals.include?(expected)
+              memo << expected_item unless yield actual_collection_includes?(expected_item)
             end
+            memo
           end
         end
         
         # is actual param a SolrResponseHash? 
-        def comparing_doc_to_solr_resp_hash?(actual, expected)
-          actual.is_a?(RSpecSolr::SolrResponseHash)
+        def comparing_doc_to_solr_resp_hash?(expected_item)
+          actual.is_a?(RSpecSolr::SolrResponseHash) && !expected_item.is_a?(RSpecSolr::SolrResponseHash)
         end
         
         def method_missing(method, *args, &block)
@@ -118,6 +126,20 @@ private
             docs = "document"
           end
         end
+
+      def to_sentence(words=[])
+        words = words.map{|w| w.inspect}
+        case words.length
+          when 0
+            ""
+          when 1
+            " #{words[0]}"
+          when 2
+            " #{words[0]} and #{words[1]}"
+          else
+            " #{words[0...-1].join(', ')}, and #{words[-1]}"
+        end
+      end
         
       end # class Include
     end # module BuiltIn

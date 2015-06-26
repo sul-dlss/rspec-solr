@@ -25,15 +25,15 @@ describe RSpecSolr do
     end
     
     it "passes args to target" do
-      target = mock("target")
-      target.should_receive(:items).with("arg1","arg2").and_return([1,2,3])
-      target.should have(3).items("arg1","arg2")
+      target = double("target")
+      expect(target).to receive(:items).with("arg1","arg2").and_return([1,2,3])
+      expect(target).to have(3).items("arg1","arg2")
     end
     it "passes block to target" do
-          target = mock("target")
+          target = double("target")
           block = lambda { 5 }
-          target.should_receive(:items).with("arg1","arg2", block).and_return([1,2,3])
-          target.should have(3).items("arg1","arg2", block)
+          expect(target).to receive(:items).with("arg1","arg2", block).and_return([1,2,3])
+          expect(target).to have(3).items("arg1","arg2", block)
     end
   end
   
@@ -59,21 +59,21 @@ describe RSpecSolr do
     end
     
     it "fails if target response has < n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should have(6).documents
-      }.should fail_with("expected 6 documents, got 5")
-      lambda {
+      }.to raise_error.with_message "expected 6 documents, got 5"
+      expect {
         @solr_resp_no_docs.should have(1).document
-      }.should fail_with("expected 1 document, got 0")
+      }.to raise_error.with_message "expected 1 document, got 0"
     end
     
     it "fails if target response has > n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should have(4).documents
-      }.should fail_with("expected 4 documents, got 5")
-      lambda {
+      }.to raise_error.with_message "expected 4 documents, got 5"
+      expect {
         @solr_resp_1_doc.should have(0).documents
-      }.should fail_with("expected 0 documents, got 1")
+      }.to raise_error.with_message "expected 0 documents, got 1"
     end
     
   end
@@ -92,9 +92,9 @@ describe RSpecSolr do
     end
     
     it "fails if target response has n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should_not have(5).documents
-      }.should fail_with("expected target not to have 5 documents, got 5")
+      }.to raise_error.with_message "expected target not to have 5 documents, got 5"
     end
   end
   
@@ -107,21 +107,21 @@ describe RSpecSolr do
       @solr_resp_no_docs.should have_exactly(:no).documents
     end
     it "fails if target response has < n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should have_exactly(6).documents
-      }.should fail_with("expected 6 documents, got 5")
-      lambda {
+      }.to raise_error.with_message "expected 6 documents, got 5"
+      expect {
         @solr_resp_no_docs.should have_exactly(1).document
-      }.should fail_with("expected 1 document, got 0")
+      }.to raise_error.with_message "expected 1 document, got 0"
     end
     
     it "fails if target response has > n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should have_exactly(4).documents
-      }.should fail_with("expected 4 documents, got 5")
-      lambda {
+      }.to raise_error.with_message "expected 4 documents, got 5"
+      expect {
         @solr_resp_1_doc.should have_exactly(0).documents
-      }.should fail_with("expected 0 documents, got 1")
+      }.to raise_error.with_message "expected 0 documents, got 1"
     end
   end
   
@@ -138,12 +138,12 @@ describe RSpecSolr do
     end
     
     it "fails if target response has < n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should have_at_least(6).documents
-      }.should fail_matching("expected at least 6 documents, got 5")
-      lambda {
+      }.to raise_error.with_message "expected at least 6 documents, got 5"
+      expect {
         @solr_resp_no_docs.should have_at_least(1).document
-      }.should fail_matching("expected at least 1 document, got 0")
+      }.to raise_error.with_message "expected at least 1 document, got 0"
     end
     
     it "provides educational negative failure messages" do
@@ -175,12 +175,12 @@ EOF
     end
 
     it "fails if target response has > n documents" do
-      lambda {
+      expect {
         @solr_resp_5_docs.should have_at_most(4).documents
-      }.should fail_matching("expected at most 4 documents, got 5")
-      lambda {
+      }.to raise_error.with_message "expected at most 4 documents, got 5"
+      expect {
         @solr_resp_1_doc.should have_at_most(0).documents
-      }.should fail_matching("expected at most 0 documents, got 1")
+      }.to raise_error.with_message "expected at most 0 documents, got 1"
     end
 
     it "provides educational negative failure messages" do

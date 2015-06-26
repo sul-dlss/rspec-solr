@@ -16,11 +16,11 @@ module RSpecSolr::Matchers
       solr_resp["response"]["numFound"] > 0
     end
 
-    failure_message_for_should do |solr_resp|
+    failure_message do |solr_resp|
       "expected documents in Solr response #{solr_resp["response"]}"
     end
     
-    failure_message_for_should_not do |solr_resp|
+    failure_message_when_negated do |solr_resp|
       "did not expect documents, but Solr response had #{solr_resp["response"]["numFound"]}"
     end 
   end
