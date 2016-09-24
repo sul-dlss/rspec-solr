@@ -70,7 +70,7 @@ module RSpec
         def excluded_from_actual
           return [] unless @actual.respond_to?(:include?)
 
-          expected.each_with_object([]) do |expected_item, memo|
+          expecteds.each_with_object([]) do |expected_item, memo|
             if comparing_doc_to_solr_resp_hash?(expected_item)
               if @before_expected
                 before_ix = actual.get_first_doc_index(@before_expected)
