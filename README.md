@@ -154,6 +154,8 @@ Please share yours!
 5. Create new Pull Request
 
 ## Releases
+- <b>3.0.0</b> Add compatibility with rspec ~> 3.5
+- <b>2.0.0</b> No release notes
 - <b>1.0.1</b> fix spec failing in travis due to diff error message in later rspec version
 - <b>1.0.0</b> declare victory and make 0.2.0 into 1.0.0
 - <b>0.2.0</b> add facet support  have_facet_field(fld_name).with_value(fld_value)
