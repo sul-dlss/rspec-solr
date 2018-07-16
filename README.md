@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/sul-dlss/rspec-solr.svg?branch=master)](https://travis-ci.org/sul-dlss/rspec-solr)
 [![Coverage Status](https://coveralls.io/repos/sul-dlss/rspec-solr/badge.svg)](https://coveralls.io/r/sul-dlss/rspec-solr)
-[![Dependency Status](https://gemnasium.com/sul-dlss/rspec-solr.svg)](https://gemnasium.com/sul-dlss/rspec-solr)
 
 # RSpec Solr
 
