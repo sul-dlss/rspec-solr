@@ -33,15 +33,15 @@ module RSpec
 
         # override failure message for improved readability
         def failure_message
-          assert_ivars :@actual, :@expected
+          assert_ivars :@actual, :@expecteds
           name_to_sentence = 'include'
           # FIXME: DRY up these messages across cases and across should and should_not
           if @before_expected
-            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
+            "expected response to #{name_to_sentence} #{doc_label_str(@expecteds)}#{to_sentence(@expecteds)} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
           elsif @min_for_last_matching_doc_pos
-            "expected each of the first #{@min_for_last_matching_doc_pos} documents to #{name_to_sentence}#{to_sentence(@expected)} in response: #{@actual.inspect}"
+            "expected each of the first #{@min_for_last_matching_doc_pos} documents to #{name_to_sentence}#{to_sentence(@expecteds)} in response: #{@actual.inspect}"
           elsif @max_doc_position
-            "expected response to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} in first #{@max_doc_position} results: #{@actual.inspect}"
+            "expected response to #{name_to_sentence} #{doc_label_str(@expecteds)}#{to_sentence(@expecteds)} in first #{@max_doc_position} results: #{@actual.inspect}"
           else
             super
           end
@@ -49,14 +49,14 @@ module RSpec
 
         # override failure message for improved readability
         def failure_message_when_negated
-          assert_ivars :@actual, :@expected
+          assert_ivars :@actual, :@expecteds
           name_to_sentence = 'include'
           if @before_expected
-            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
+            "expected response not to #{name_to_sentence} #{doc_label_str(@expecteds)}#{to_sentence(@expecteds)} before #{doc_label_str(@before_expected)} matching #{@before_expected.inspect}: #{@actual.inspect} "
           elsif @min_for_last_matching_doc_pos
-            "expected some of the first #{@min_for_last_matching_doc_pos} documents not to #{name_to_sentence}#{to_sentence(@expected)} in response: #{@actual.inspect}"
+            "expected some of the first #{@min_for_last_matching_doc_pos} documents not to #{name_to_sentence}#{to_sentence(@expecteds)} in response: #{@actual.inspect}"
           elsif @max_doc_position
-            "expected response not to #{name_to_sentence} #{doc_label_str(@expected)}#{to_sentence(@expected)} in first #{@max_doc_position} results: #{@actual.inspect}"
+            "expected response not to #{name_to_sentence} #{doc_label_str(@expecteds)}#{to_sentence(@expecteds)} in first #{@max_doc_position} results: #{@actual.inspect}"
           else
             super
           end
@@ -70,7 +70,7 @@ module RSpec
         def excluded_from_actual
           return [] unless @actual.respond_to?(:include?)
 
-          expected.each_with_object([]) do |expected_item, memo|
+          expecteds.each_with_object([]) do |expected_item, memo|
             if comparing_doc_to_solr_resp_hash?(expected_item)
               if @before_expected
                 before_ix = actual.get_first_doc_index(@before_expected)
