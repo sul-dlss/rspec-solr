@@ -16,12 +16,12 @@ describe RSpecSolr do
       it "fails if no Solr document in response has 'fldval' for the named field" do
         expect do
           expect(@solr_resp_5_docs).to include('id' => 'not_there')
-        end.to raise_error.with_message a_string_including '} to include {"id" => "not_there"}'
+        end.to raise_error.with_message a_string_including '> to include {"id" => "not_there"}'
       end
       it 'fails if no Solr document in response has the named field' do
         expect do
           expect(@solr_resp_5_docs).to include('not_there' => 'anything')
-        end.to raise_error.with_message a_string_including '} to include {"not_there" => "anything"}'
+        end.to raise_error.with_message a_string_including '> to include {"not_there" => "anything"}'
       end
     end # "should include('fldname'=>'fldval')"
 
@@ -53,18 +53,18 @@ describe RSpecSolr do
       it 'fails if only part of expectation is met' do
         expect do
           expect(@solr_resp_5_docs).to include('id' => '111', 'fld' => 'not_there')
-        end.to raise_error.with_message a_string_including '} to include {"id" => "111", "fld" => "not_there"}'
+        end.to raise_error.with_message a_string_including '> to include {"id" => "111", "fld" => "not_there"}'
         expect do
           expect(@solr_resp_5_docs).to include('id' => '111', 'not_there' => 'whatever')
-        end.to raise_error.with_message a_string_including '} to include {"id" => "111", "not_there" => "whatever"}'
+        end.to raise_error.with_message a_string_including '> to include {"id" => "111", "not_there" => "whatever"}'
         expect do
           expect(@solr_resp_5_docs).to include('id' => '222', 'fld' => 'val')
-        end.to raise_error.with_message a_string_including '} to include {"id" => "222", "fld" => "val"}'
+        end.to raise_error.with_message a_string_including '> to include {"id" => "222", "fld" => "val"}'
       end
       it 'fails if no part of expectation is met' do
         expect do
           expect(@solr_resp_5_docs).to include('id' => 'not_there', 'not_there' => 'anything')
-        end.to raise_error.with_message a_string_including '} to include {"id" => "not_there", "not_there" => "anything"}'
+        end.to raise_error.with_message a_string_including '> to include {"id" => "not_there", "not_there" => "anything"}'
       end
     end # should include('fld1'=>'val1', 'fld2'=>'val2')
 
@@ -103,12 +103,12 @@ describe RSpecSolr do
         it 'fails if none of the expected values match the values in a Solr document in the response' do
           expect do
             expect(@solr_resp_5_docs).to include('fld' => %w(not_there also_not_there))
-          end.to raise_error.with_message a_string_including '} to include {"fld" => ["not_there", "also_not_there"]}'
+          end.to raise_error.with_message a_string_including '> to include {"fld" => ["not_there", "also_not_there"]}'
         end
         it 'fails if only some of the expected values match the values in a Solr document in the response' do
           expect do
             expect(@solr_resp_5_docs).to include('fld' => %w(val1 val2 not_there))
-          end.to raise_error.with_message a_string_including '} to include {"fld" => ["val1", "val2", "not_there"]}'
+          end.to raise_error.with_message a_string_including '> to include {"fld" => ["val1", "val2", "not_there"]}'
         end
       end # should
 
@@ -156,14 +156,14 @@ describe RSpecSolr do
         it 'fails if string does not match default id_field of Solr document in the response' do
           expect do
             expect(@solr_resp_5_docs).to include('666')
-          end.to raise_error.with_message a_string_including '} to include "666"'
+          end.to raise_error.with_message a_string_including '> to include "666"'
         end
         it "fails if string doesn't match non-default id_field in the SolrResponseHash object" do
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field = 'fld2'
           expect do
             expect(my_srh).to include('val')
-          end.to raise_error.with_message a_string_including '} to include "val"'
+          end.to raise_error.with_message a_string_including '> to include "val"'
         end
       end # should
 
@@ -209,25 +209,25 @@ describe RSpecSolr do
         it "fails if no Strings in Array match Solr documents' id_field in the response" do
           expect do
             expect(@solr_resp_5_docs).to include(%w(888 899))
-          end.to raise_error.with_message a_string_including '} to include ["888", "899"]'
+          end.to raise_error.with_message a_string_including '> to include ["888", "899"]'
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field = 'fld2'
           expect do
             expect(my_srh).to include(%w(val8 val9))
-          end.to raise_error.with_message a_string_including '} to include ["val8", "val9"]'
+          end.to raise_error.with_message a_string_including '> to include ["val8", "val9"]'
         end
         it "fails if only some Strings in Array match Solr documents' id_field in the response" do
           expect do
             expect(@solr_resp_5_docs).to include(%w(111 222 999))
-          end.to raise_error.with_message a_string_including '} to include ["111", "222", "999"]'
+          end.to raise_error.with_message a_string_including '> to include ["111", "222", "999"]'
           expect do
             expect(@solr_resp_5_docs).to include(%w(666 555))
-          end.to raise_error.with_message a_string_including '} to include ["666", "555"]'
+          end.to raise_error.with_message a_string_including '> to include ["666", "555"]'
           my_srh = @solr_resp_5_docs.clone
           my_srh.id_field = 'fld2'
           expect do
             expect(my_srh).to include(%w(val2 val9))
-          end.to raise_error.with_message a_string_including '} to include ["val2", "val9"]'
+          end.to raise_error.with_message a_string_including '> to include ["val2", "val9"]'
         end
       end # should include(Array_of_Strings)
 
@@ -286,12 +286,12 @@ describe RSpecSolr do
         it 'fails if no Hashes in Array match Solr documents in the response' do
           expect do
             expect(@solr_resp_5_docs).to include([{ 'foo' => 'bar' }, { 'bar' => 'food', 'mmm' => 'food' }])
-          end.to raise_error.with_message a_string_including '} to include [{"foo" => "bar"}, {"bar" => "food", "mmm" => "food"}]'
+          end.to raise_error.with_message a_string_including '> to include [{"foo" => "bar"}, {"bar" => "food", "mmm" => "food"}]'
         end
         it 'fails if only some Hashes in Array match Solr documents in the response' do
           expect do
             expect(@solr_resp_5_docs).to include([{ 'id' => '222' }, { 'id' => '333', 'fld' => 'val' }, { 'foo' => 'bar' }, { 'bar' => 'food', 'mmm' => 'food' }])
-          end.to raise_error.with_message a_string_including '} to include [{"id" => "222"},'
+          end.to raise_error.with_message a_string_including '> to include [{"id" => "222"},'
         end
       end # should include(Array_of_Hashes)
 
@@ -331,10 +331,10 @@ describe RSpecSolr do
         it 'fails if any element of Array fails' do
           expect do
             expect(@solr_resp_5_docs).to include(['not_there', { 'id' => '111', 'fld' => 'val' }, '555'])
-          end.to raise_error.with_message a_string_including '} to include ['
+          end.to raise_error.with_message a_string_including '> to include ['
           expect do
             expect(@solr_resp_5_docs).to include(['222', { 'id' => '111', 'not' => 'there' }, '555'])
-          end.to raise_error.with_message a_string_including '} to include ['
+          end.to raise_error.with_message a_string_including '> to include ['
         end
       end
 
@@ -356,12 +356,12 @@ describe RSpecSolr do
         it "fails if no Solr document in response has 'fldval' for the named field" do
           expect do
             expect(@solr_resp_5_docs).to include('id' => /not there/)
-          end.to raise_error.with_message a_string_including '} to include {"id" => /not there/}'
+          end.to raise_error.with_message a_string_including '> to include {"id" => /not there/}'
         end
         it 'fails if no Solr document in response has the named field' do
           expect do
             expect(@solr_resp_5_docs).to include('not_there' => /anything/)
-          end.to raise_error.with_message a_string_including '} to include {"not_there" => /anything/}'
+          end.to raise_error.with_message a_string_including '> to include {"not_there" => /anything/}'
         end
       end # should include('fld' => /regex/)
 
